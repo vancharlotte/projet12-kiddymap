@@ -22,7 +22,7 @@
 		<module>eureka-server</module>
 		<module>microservice-profil</module>
 		<module>microservice-location</module>
-		<module>zuul-server</module>
+		<module>api-gateway</module>
 	</modules>
 
 
