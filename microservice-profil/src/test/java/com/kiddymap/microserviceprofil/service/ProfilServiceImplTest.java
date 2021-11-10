@@ -3,6 +3,7 @@ package com.kiddymap.microserviceprofil.service;
 import com.kiddymap.microserviceprofil.dao.ProfilDao;
 import com.kiddymap.microserviceprofil.model.Profil;
 import com.kiddymap.microserviceprofil.service.contrat.ProfilService;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -20,6 +21,18 @@ public class ProfilServiceImplTest {
 
     @Mock
     private ProfilDao profilDaoMock;
+
+    @BeforeAll
+    public static void createListProfils() {
+        Profil profil1 = new Profil();
+        profil1.setUsername("profil1");
+        profil1.setDescription("description1");
+
+        Profil profil2 = new Profil();
+        profil2.setUsername("profil2");
+        profil2.setDescription("description");
+
+    }
 
     @Test
     void newProfilTest(){
