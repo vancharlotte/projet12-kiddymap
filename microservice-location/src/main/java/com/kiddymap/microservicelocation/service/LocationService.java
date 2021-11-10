@@ -3,14 +3,15 @@ package com.kiddymap.microservicelocation.service;
 import com.kiddymap.microservicelocation.model.Location;
 
 import java.util.Optional;
+import java.util.UUID;
 
 public interface LocationService {
 
     Location saveLocation(Location location);
 
-    Optional<Location> getLocation(String id);
+    Optional<Location> getLocation(UUID id);
 
-    Iterable<Location> getLocations();
+    Iterable<Location> getAllLocations();
 
-    void deleteLocation(String id);
+    void deleteLocation(UUID id);
 }

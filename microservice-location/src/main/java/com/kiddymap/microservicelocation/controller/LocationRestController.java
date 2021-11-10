@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
+import java.util.UUID;
 
 
 @RestController
@@ -31,7 +32,7 @@ public class LocationRestController {
      * @return A location object full filled
      */
     @GetMapping("/location/{id}")
-    public Location getLocation(@PathVariable("id") final String id) {
+    public Location getLocation(@PathVariable("id") final UUID id) {
         Optional<Location> location = locationService.getLocation(id);
         if(location.isPresent()) {
             return location.get();
@@ -45,7 +46,7 @@ public class LocationRestController {
      * @return - An Iterable object of location full filled
      */
     @GetMapping("/locations")
-    public Iterable<Location> getLocations() {
+    public Iterable<Location> getAllLocations() {
         return locationService.getLocations();
     }
 
@@ -56,7 +57,7 @@ public class LocationRestController {
      * @return
      */
     @PutMapping("/location/{id}")
-    public Location updateLocation (@PathVariable("id") final String id, @RequestBody Location location) {
+    public Location updateLocation (@PathVariable("id") final UUID id, @RequestBody Location location) {
         Optional<Location> e = locationService.getLocation(id);
         if (e.isPresent()) {
             Location currentLocation = e.get();
@@ -79,7 +80,7 @@ public class LocationRestController {
      * @param id - The id of the location to delete
      */
     @DeleteMapping("/profil/{id}")
-    public void deleteLocation(@PathVariable("id") final String id) {
+    public void deleteLocation(@PathVariable("id") final UUID id) {
         locationService.deleteLocation(id);
     }
 

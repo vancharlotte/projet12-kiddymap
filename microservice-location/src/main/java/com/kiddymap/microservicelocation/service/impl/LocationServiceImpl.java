@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class LocationServiceImpl implements LocationService {
@@ -20,17 +21,17 @@ public class LocationServiceImpl implements LocationService {
     }
 
     @Override
-    public Optional<Location> getLocation(String id) {
+    public Optional<Location> getLocation(UUID id) {
         return locationDao.findById(id);
     }
 
     @Override
-    public Iterable<Location> getLocations() {
+    public Iterable<Location> getAllLocations() {
         return locationDao.findAll();
     }
 
     @Override
-    public void deleteLocation(String id) {
+    public void deleteLocation(UUID id) {
         locationDao.deleteById(id);
     }
 }

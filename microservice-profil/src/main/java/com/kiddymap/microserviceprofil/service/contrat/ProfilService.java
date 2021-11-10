@@ -3,16 +3,17 @@ package com.kiddymap.microserviceprofil.service.contrat;
 import com.kiddymap.microserviceprofil.model.Profil;
 
 import java.util.Optional;
+import java.util.UUID;
 
 public interface ProfilService {
 
     void newProfil(Profil profil);
 
-    Optional<Profil> getProfil(String id);
+    Optional<Profil> getProfil(UUID id);
 
     void updateProfil(Profil profil);
 
-    void deleteProfil(String id);
+    void deleteProfil(UUID id);
 
     Profil saveProfil(Profil profil);
 }

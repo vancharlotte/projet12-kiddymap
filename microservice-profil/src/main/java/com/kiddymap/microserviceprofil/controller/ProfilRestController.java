@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @RestController
 public class ProfilRestController {
@@ -30,7 +31,7 @@ public class ProfilRestController {
      * @return A profil object full filled
      */
     @GetMapping("/profil/{id}")
-    public Profil getProfil(@PathVariable("id") final String id) {
+    public Profil getProfil(@PathVariable("id") final UUID id) {
         Optional<Profil> profil = profilService.getProfil(id);
         if(profil.isPresent()) {
             return profil.get();
@@ -55,7 +56,7 @@ public class ProfilRestController {
      * @return
      */
     @PutMapping("/profil/{id}")
-    public Profil updateProfil(@PathVariable("id") final String id, @RequestBody Profil profil) {
+    public Profil updateProfil(@PathVariable("id") final UUID id, @RequestBody Profil profil) {
         Optional<Profil> e = profilService.getProfil(id);
         if (e.isPresent()) {
             Profil currentProfil = e.get();
@@ -78,7 +79,7 @@ public class ProfilRestController {
      * @param id - The id of the profil to delete
      */
     @DeleteMapping("/profil/{id}")
-    public void deleteProfil(@PathVariable("id") final String id) {
+    public void deleteProfil(@PathVariable("id") final UUID id) {
         profilService.deleteProfil(id);
     }
 

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @Transactional
@@ -22,7 +23,7 @@ public class ProfilServiceImpl implements ProfilService {
     }
 
     @Override
-    public Optional<Profil> getProfil(final String id) {
+    public Optional<Profil> getProfil(final UUID id) {
         return profilDao.findById(id);
     }
 
@@ -32,7 +33,7 @@ public class ProfilServiceImpl implements ProfilService {
     }
 
     @Override
-    public void deleteProfil(String id) {
+    public void deleteProfil(UUID id) {
         profilDao.deleteById(id);
     }
 
