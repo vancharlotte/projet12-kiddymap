@@ -1,0 +1,17 @@
+version: '2'
+services:
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+  kiddymap.db:
+    image: postgres:9.4
+    ports:
+      - "127.0.0.1:9032:5432"
+    volumes:
+      - "./init/db/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d"
+    environment:
+      - POSTGRES_DB=db_kiddymap
+      - POSTGRES_USER=usr_kiddymap
+      - POSTGRES_PASSWORD=kiddymap
