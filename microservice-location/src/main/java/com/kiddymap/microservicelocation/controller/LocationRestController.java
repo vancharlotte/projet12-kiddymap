@@ -47,7 +47,7 @@ public class LocationRestController {
      */
     @GetMapping("/locations")
     public Iterable<Location> getAllLocations() {
-        return locationService.getLocations();
+        return locationService.getAllLocations();
     }
 
     /**
@@ -79,12 +79,9 @@ public class LocationRestController {
      * Delete - Delete a location
      * @param id - The id of the location to delete
      */
-    @DeleteMapping("/profil/{id}")
+    @DeleteMapping("/location/{id}")
     public void deleteLocation(@PathVariable("id") final UUID id) {
         locationService.deleteLocation(id);
     }
-
-
-
 
 }

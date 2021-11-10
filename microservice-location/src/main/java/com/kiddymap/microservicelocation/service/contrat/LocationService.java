@@ -1,4 +1,4 @@
-package com.kiddymap.microservicelocation.service;
+package com.kiddymap.microservicelocation.service.contrat;
 
 import com.kiddymap.microservicelocation.model.Location;
 

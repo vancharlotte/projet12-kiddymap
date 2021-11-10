@@ -2,7 +2,7 @@ package com.kiddymap.microservicelocation.service.impl;
 
 import com.kiddymap.microservicelocation.dao.LocationDao;
 import com.kiddymap.microservicelocation.model.Location;
-import com.kiddymap.microservicelocation.service.LocationService;
+import com.kiddymap.microservicelocation.service.contrat.LocationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

@@ -10,7 +10,7 @@ import java.util.UUID;
 
 @Entity
 @Data
-public class Location {
+public class Equipment {
 
     @Id
     @GeneratedValue(generator = "UUID2")
@@ -19,14 +19,7 @@ public class Location {
     private UUID id;
 
     private String name;
-    private String description;
 
     @ManyToMany(mappedBy = "equipments")
-    @JoinTable(name = "location_equipment",
-            joinColumns = @JoinColumn(name = "location_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "equipment_id", referencedColumnName = "id"))
     private List<Location> locations = new ArrayList<>();
-
-
-
 }
