@@ -9,11 +9,10 @@ import java.util.UUID;
 
 public interface ProfilService {
 
-    void newProfil(Profil profil);
 
     Optional<Profil> getProfil(UUID id);
 
-    void updateProfil(Profil profil);
+    Profil updateProfil(Profil profil);
 
     void deleteProfil(UUID id);
 

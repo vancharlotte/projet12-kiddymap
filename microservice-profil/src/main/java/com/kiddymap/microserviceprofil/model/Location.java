@@ -17,6 +17,10 @@ public class Location {
     @Column(name = "id", updatable = false, nullable = false)
     private UUID id;
 
+    private String name;
+
+    private String description;
+
     @ManyToMany(mappedBy = "favoriteLocations")
     List<Profil> profils;
 

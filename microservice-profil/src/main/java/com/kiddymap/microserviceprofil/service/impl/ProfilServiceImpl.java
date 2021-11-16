@@ -19,10 +19,6 @@ public class ProfilServiceImpl implements ProfilService {
     @Autowired
     ProfilDao profilDao;
 
-    @Override
-    public void newProfil(Profil profil) {
-        profilDao.save(profil);
-    }
 
     @Override
     public Optional<Profil> getProfil(final UUID id) {
@@ -30,8 +26,8 @@ public class ProfilServiceImpl implements ProfilService {
     }
 
     @Override
-    public void updateProfil(Profil profil) {
-        profilDao.save(profil);
+    public Profil updateProfil(Profil profil) {
+        return profilDao.save(profil);
     }
 
     @Override
@@ -46,7 +42,12 @@ public class ProfilServiceImpl implements ProfilService {
 
     @Override
     public Profil updateProfilFavorite(Location location, Profil profil){
+        System.out.println(
+                profil.getFavoriteLocations().size());
         profil.getFavoriteLocations().add(location);
+        System.out.println(
+                profil.getFavoriteLocations().size());
+
         profilDao.save(profil);
         return profil;
     }
