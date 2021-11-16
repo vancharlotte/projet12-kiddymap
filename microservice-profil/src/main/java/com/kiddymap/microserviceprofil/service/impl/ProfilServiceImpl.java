@@ -42,12 +42,7 @@ public class ProfilServiceImpl implements ProfilService {
 
     @Override
     public Profil updateProfilFavorite(Location location, Profil profil){
-        System.out.println(
-                profil.getFavoriteLocations().size());
         profil.getFavoriteLocations().add(location);
-        System.out.println(
-                profil.getFavoriteLocations().size());
-
         profilDao.save(profil);
         return profil;
     }
