@@ -3,10 +3,8 @@ package com.kiddymap.microserviceprofil.model;
 import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -21,4 +19,11 @@ public class Profil {
 
     String username;
     String description;
+
+    @ManyToMany
+    @JoinTable(
+            name = "profil_location_favorite",
+            joinColumns = @JoinColumn(name = "profil_id"),
+            inverseJoinColumns = @JoinColumn(name = "location_id"))
+    List<Location> favoriteLocations;
 }

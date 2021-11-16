@@ -44,6 +44,7 @@ public class ProfilRestController {
      * Read - Get all profils
      * @return - An Iterable object of Profil full filled
      */
+
    /* @GetMapping("/profils")
     public Iterable<Profil> getProfils() {
         return profilService.getProfils();
@@ -82,6 +83,7 @@ public class ProfilRestController {
     public void deleteProfil(@PathVariable("id") final UUID id) {
         profilService.deleteProfil(id);
     }
+
 
 
 

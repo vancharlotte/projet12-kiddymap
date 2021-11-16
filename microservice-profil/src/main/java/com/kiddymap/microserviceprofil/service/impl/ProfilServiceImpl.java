@@ -1,12 +1,14 @@
 package com.kiddymap.microserviceprofil.service.impl;
 
 import com.kiddymap.microserviceprofil.dao.ProfilDao;
+import com.kiddymap.microserviceprofil.model.Location;
 import com.kiddymap.microserviceprofil.model.Profil;
 import com.kiddymap.microserviceprofil.service.contrat.ProfilService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -41,6 +43,26 @@ public class ProfilServiceImpl implements ProfilService {
     public Profil saveProfil(Profil profil) {
         return profilDao.save(profil);
     }
+
+    @Override
+    public Profil updateProfilFavorite(Location location, Profil profil){
+        profil.getFavoriteLocations().add(location);
+        profilDao.save(profil);
+        return profil;
+    }
+
+    @Override
+    public Profil deleteProfilFavorite(Location location, Profil profil){
+        profil.getFavoriteLocations().remove(location);
+        profilDao.save(profil);
+        return profil;
+    }
+
+    public List<Location> getAllFavorites(Profil profil){
+        return null;
+    }
+
+
 
 
 }
