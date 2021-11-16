@@ -58,8 +58,15 @@ public class ProfilServiceImpl implements ProfilService {
         return profil;
     }
 
-    public List<Location> getAllFavorites(Profil profil){
-        return null;
+    @Override
+    public List<Location> getAllFavorites(UUID id){
+        Optional<Profil> profil = profilDao.findById(id);
+        if( profil.isPresent()){
+            return profil.get().getFavoriteLocations();
+        }
+        else{
+            return null;
+        }
     }
 
 

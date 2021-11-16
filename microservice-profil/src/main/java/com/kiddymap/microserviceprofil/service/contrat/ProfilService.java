@@ -3,6 +3,7 @@ package com.kiddymap.microserviceprofil.service.contrat;
 import com.kiddymap.microserviceprofil.model.Location;
 import com.kiddymap.microserviceprofil.model.Profil;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -21,4 +22,6 @@ public interface ProfilService {
     Profil updateProfilFavorite(Location location, Profil profil);
 
     Profil deleteProfilFavorite(Location location, Profil profil);
+
+    List<Location> getAllFavorites(UUID id);
 }
