@@ -17,6 +17,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 @ExtendWith(MockitoExtension.class)
 public class ProfilRestControllerTest {
@@ -65,10 +66,23 @@ public class ProfilRestControllerTest {
     }
 
     @Test
+    void getProfilTest_returnNull(){
+        Mockito.when(profilServiceMock.getProfil(profil.getId())).thenReturn(Optional.empty());
+        assertNull(profilRestController.getProfil(profil.getId()));
+    }
+
+    @Test
     void updateProfilTest(){
         Mockito.when(profilServiceMock.getProfil(profil.getId())).thenReturn(Optional.of(profil));
         Mockito.when(profilServiceMock.saveProfil(profil)).thenReturn(profil);
         assertEquals(profil,profilRestController.updateProfil(profil.getId(),profil));
+
+    }
+
+    @Test
+    void updateProfilTest_returnNull(){
+        Mockito.when(profilServiceMock.getProfil(profil.getId())).thenReturn(Optional.empty());
+        assertNull(profilRestController.updateProfil(profil.getId(),profil));
 
     }
 

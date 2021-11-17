@@ -16,6 +16,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 @ExtendWith(MockitoExtension.class)
 public class EquipmentRestControllerTest {
@@ -56,6 +57,12 @@ public class EquipmentRestControllerTest {
     }
 
     @Test
+    void getEquipmentTest_returnNull(){
+        Mockito.when(equipmentServiceMock.getEquipment(equipment.getId())).thenReturn(Optional.empty());
+        assertNull(equipmentRestController.getEquipment(equipment.getId()));
+    }
+
+    @Test
     void getAllEquipmentsTest(){
         Mockito.when(equipmentServiceMock.getAllEquipments()).thenReturn(equipments);
         assertEquals(equipments, equipmentRestController.getAllEquipments());
@@ -67,6 +74,14 @@ public class EquipmentRestControllerTest {
         Mockito.when(equipmentServiceMock.saveEquipment(equipment)).thenReturn(equipment);
         assertEquals(equipment, equipmentRestController.updateEquipment(equipment.getId(),equipment));
     }
+
+    @Test
+    void updateEquipmentTest_returnNull(){
+        Mockito.when(equipmentServiceMock.getEquipment(equipment.getId())).thenReturn(Optional.empty());
+        assertNull(equipmentRestController.updateEquipment(equipment.getId(),equipment));
+    }
+
+
 
     @Test
     void deleteEquipmentTest(){

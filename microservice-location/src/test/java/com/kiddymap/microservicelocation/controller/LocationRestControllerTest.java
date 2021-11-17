@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 @ExtendWith(MockitoExtension.class)
 public class LocationRestControllerTest {
@@ -53,6 +54,12 @@ public class LocationRestControllerTest {
     }
 
     @Test
+    void getLocationTest_returnNull(){
+        Mockito.when(locationServiceMock.getLocation(location.getId())).thenReturn(Optional.empty());
+        assertNull(locationRestController.getLocation(location.getId()));
+    }
+
+    @Test
     void getAllLocationsTest(){
         Mockito.when(locationServiceMock.getAllLocations()).thenReturn(locations);
         assertEquals(locations,locationRestController.getAllLocations());
@@ -66,6 +73,11 @@ public class LocationRestControllerTest {
         assertEquals(location, locationRestController.updateLocation(location.getId(),location));
     }
 
+    @Test
+    void updateLocationTest_returnNull(){
+        Mockito.when(locationServiceMock.getLocation(location.getId())).thenReturn(Optional.empty());
+        assertNull(locationRestController.updateLocation(location.getId(),location));
+    }
     @Test
     void deleteLocationTest(){
         locationRestController.deleteLocation(location.getId());

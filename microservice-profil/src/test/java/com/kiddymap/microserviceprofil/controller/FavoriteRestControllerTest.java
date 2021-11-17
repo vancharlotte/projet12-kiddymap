@@ -18,6 +18,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 @ExtendWith(MockitoExtension.class)
 public class FavoriteRestControllerTest {
@@ -58,12 +59,34 @@ public class FavoriteRestControllerTest {
     public void addProfilFavoriteTest(){
         Mockito.when(profilServiceMock.getProfil(profil.getId())).thenReturn(Optional.of(profil));
         Mockito.when(locationServiceMock.getLocation(location.getId())).thenReturn(Optional.of(location));
-
         Mockito.when(profilServiceMock.updateProfilFavorite(location,profil)).thenReturn(profil);
 
         assertEquals(profil, favoriteRestController.addProfilFavorite(location.getId(),profil));
+    }
+
+    @Test
+    public void addProfilFavoriteTest_profilReturnNull(){
+        Mockito.when(profilServiceMock.getProfil(profil.getId())).thenReturn(Optional.empty());
+        Mockito.when(locationServiceMock.getLocation(location.getId())).thenReturn(Optional.of(location));
+
+        assertNull(favoriteRestController.addProfilFavorite(location.getId(),profil));
+    }
+
+    @Test
+    public void addProfilFavoriteTest_locationReturnNull(){
+        Mockito.when(profilServiceMock.getProfil(profil.getId())).thenReturn(Optional.of(profil));
+        Mockito.when(locationServiceMock.getLocation(location.getId())).thenReturn(Optional.empty());
+
+        assertNull(favoriteRestController.addProfilFavorite(location.getId(),profil));
+    }
 
 
+    @Test
+    public void addProfilFavoriteTest_profilAndLocationReturnNull(){
+        Mockito.when(profilServiceMock.getProfil(profil.getId())).thenReturn(Optional.empty());
+        Mockito.when(locationServiceMock.getLocation(location.getId())).thenReturn(Optional.empty());
+
+        assertNull(favoriteRestController.addProfilFavorite(location.getId(),profil));
     }
 
     @Test
@@ -79,12 +102,43 @@ public class FavoriteRestControllerTest {
     }
 
     @Test
+    public void deleteProfilFavoriteTest_profilReturnNull(){
+        Mockito.when(profilServiceMock.getProfil(profil.getId())).thenReturn(Optional.empty());
+        Mockito.when(locationServiceMock.getLocation(location.getId())).thenReturn(Optional.of(location));
+
+        assertNull(favoriteRestController.deleteProfilFavorite(location.getId(),profil));
+
+    }
+
+    @Test
+    public void deleteProfilFavoriteTest_locationReturnNull(){
+        Mockito.when(profilServiceMock.getProfil(profil.getId())).thenReturn(Optional.of(profil));
+        Mockito.when(locationServiceMock.getLocation(location.getId())).thenReturn(Optional.empty());
+
+        assertNull(favoriteRestController.deleteProfilFavorite(location.getId(),profil));
+    }
+
+    @Test
+    public void deleteProfilFavoriteTest_profilAndLocationReturnNull(){
+        Mockito.when(profilServiceMock.getProfil(profil.getId())).thenReturn(Optional.empty());
+        Mockito.when(locationServiceMock.getLocation(location.getId())).thenReturn(Optional.empty());
+
+        assertNull(favoriteRestController.deleteProfilFavorite(location.getId(),profil));
+    }
+
+    @Test
     public void getProfilAllFavoriteTest(){
         Mockito.when(profilServiceMock.getProfil(profil.getId())).thenReturn(Optional.of(profil));
         Mockito.when(profilServiceMock.getAllFavorites(profil.getId())).thenReturn(profil.getFavoriteLocations());
 
         assertEquals(profil.getFavoriteLocations(), favoriteRestController.getProfilAllFavorite(profil.getId(),profil));
 
+    }
+
+    @Test
+    public void getProfilAllFavoriteTest_returnNull(){
+        Mockito.when(profilServiceMock.getProfil(profil.getId())).thenReturn(Optional.empty());
+        assertNull(favoriteRestController.getProfilAllFavorite(profil.getId(),profil));
 
     }
 

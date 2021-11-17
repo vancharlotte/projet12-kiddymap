@@ -99,4 +99,11 @@ public class ProfilServiceImplTest {
 
     }
 
+    @Test
+    public void getAllFavoritesTest_returnNull(){
+        Mockito.when(profilDaoMock.findById(profil.getId())).thenReturn(Optional.empty());
+        assertNull(profilService.getAllFavorites(profil.getId()));
+
+    }
+
 }
