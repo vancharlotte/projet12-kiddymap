@@ -4,7 +4,6 @@ import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -21,11 +20,11 @@ public class Location {
     private String name;
     private String description;
 
-    @ManyToMany(mappedBy = "equipments")
+    @ManyToMany
     @JoinTable(name = "location_equipment",
-            joinColumns = @JoinColumn(name = "location_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "equipment_id", referencedColumnName = "id"))
-    private List<Location> locations = new ArrayList<>();
+            joinColumns = @JoinColumn(name = "location_id"),
+            inverseJoinColumns = @JoinColumn(name = "equipment_id"))
+    private List<Location> equipments;
 
 
 
