@@ -2,46 +2,70 @@ package com.kiddymap.microservicelocation.service;
 
 import com.kiddymap.microservicelocation.dao.EquipmentDao;
 import com.kiddymap.microservicelocation.model.Equipment;
-import com.kiddymap.microservicelocation.service.contrat.EquipmentService;
+import com.kiddymap.microservicelocation.service.impl.EquipmentServiceImpl;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(MockitoExtension.class)
 public class EquipmentServiceImplTest {
 
     @InjectMocks
-    private EquipmentService equipmentService;
+    private EquipmentServiceImpl equipmentService;
 
     @Mock
     private EquipmentDao equipmentDaoMock;
 
+    private static Equipment equipment;
+
+    private static List<Equipment> equipments;
+
+
+
     @BeforeAll
     public static void createListEquipments() {
-        Equipment equipment1 = new Equipment();
-        equipment1.setName("equipment1");
+        equipment = new Equipment();
+        equipment.setId(UUID.randomUUID());
+        equipment.setName("equipment");
 
-        Equipment equipment2 = new Equipment();
-        equipment2.setName("equipment2");
+        equipments = new ArrayList<>();
+        equipments.add(equipment);
 
     }
 
     @Test
     void getEquipmentTest(){
+        Mockito.when(equipmentDaoMock.findById(equipment.getId())).thenReturn(Optional.of(equipment));
+        assertEquals(equipment , equipmentService.getEquipment(equipment.getId()).get());
     }
 
     @Test
     void getAllEquipmentsTest(){
+        Mockito.when(equipmentDaoMock.findAll()).thenReturn(equipments);
+        assertEquals(equipments, equipmentService.getAllEquipments());
     }
 
     @Test
     void deleteEquipmentTest(){
+        equipmentService.deleteEquipment(equipment.getId());
+        Mockito.verify(equipmentDaoMock).deleteById(equipment.getId());
+
     }
 
     @Test
     void saveEquipmentTest(){
+        Mockito.when(equipmentDaoMock.save(equipment)).thenReturn(equipment);
+        assertEquals(equipment, equipmentService.saveEquipment(equipment));
     }
 }

@@ -2,6 +2,7 @@ package com.kiddymap.microserviceprofil.controller;
 
 import com.kiddymap.microserviceprofil.model.Location;
 import com.kiddymap.microserviceprofil.model.Profil;
+import com.kiddymap.microserviceprofil.service.impl.LocationServiceImpl;
 import com.kiddymap.microserviceprofil.service.impl.ProfilServiceImpl;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -19,13 +20,16 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(MockitoExtension.class)
-public class ProfilRestControllerTest {
+public class FavoriteRestControllerTest {
 
     @InjectMocks
-    private ProfilRestController profilRestController;
+    private FavoriteRestController favoriteRestController;
 
     @Mock
     private ProfilServiceImpl profilServiceMock;
+
+    @Mock
+    private LocationServiceImpl locationServiceMock;
 
     private static Profil profil;
 
@@ -46,35 +50,43 @@ public class ProfilRestControllerTest {
         List<Location> favorites = new ArrayList<>();
         favorites.add(location);
 
-
         profil.setFavoriteLocations(favorites);
 
     }
 
-
     @Test
-    void createProfilTest(){
-        Mockito.when(profilServiceMock.saveProfil(profil)).thenReturn(profil);
-        assertEquals(profil,profilRestController.createProfil(profil));
-    }
-
-    @Test
-    void getProfilTest(){
+    public void addProfilFavoriteTest(){
         Mockito.when(profilServiceMock.getProfil(profil.getId())).thenReturn(Optional.of(profil));
-        assertEquals(profil,profilRestController.getProfil(profil.getId()));
+        Mockito.when(locationServiceMock.getLocation(location.getId())).thenReturn(Optional.of(location));
+
+        Mockito.when(profilServiceMock.updateProfilFavorite(location,profil)).thenReturn(profil);
+
+        assertEquals(profil, favoriteRestController.addProfilFavorite(location.getId(),profil));
+
+
     }
 
     @Test
-    void updateProfilTest(){
+    public void deleteProfilFavoriteTest(){
         Mockito.when(profilServiceMock.getProfil(profil.getId())).thenReturn(Optional.of(profil));
-        Mockito.when(profilServiceMock.saveProfil(profil)).thenReturn(profil);
-        assertEquals(profil,profilRestController.updateProfil(profil.getId(),profil));
+        Mockito.when(locationServiceMock.getLocation(location.getId())).thenReturn(Optional.of(location));
+
+        Mockito.when(profilServiceMock.deleteProfilFavorite(location,profil)).thenReturn(profil);
+
+        assertEquals(profil, favoriteRestController.deleteProfilFavorite(location.getId(),profil));
+
 
     }
 
     @Test
-    void deleteProfilTest(){
-        profilRestController.deleteProfil(profil.getId());
-        Mockito.verify(profilServiceMock).deleteProfil(profil.getId());
+    public void getProfilAllFavoriteTest(){
+        Mockito.when(profilServiceMock.getProfil(profil.getId())).thenReturn(Optional.of(profil));
+        Mockito.when(profilServiceMock.getAllFavorites(profil.getId())).thenReturn(profil.getFavoriteLocations());
+
+        assertEquals(profil.getFavoriteLocations(), favoriteRestController.getProfilAllFavorite(profil.getId(),profil));
+
+
     }
+
+
 }

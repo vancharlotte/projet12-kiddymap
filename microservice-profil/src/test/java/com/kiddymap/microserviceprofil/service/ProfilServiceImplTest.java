@@ -67,12 +67,8 @@ public class ProfilServiceImplTest {
 
     @Test
     void deleteProfilTest(){
-        Profil profil2 = new Profil();
-        profil2.setId(UUID.randomUUID());
-        profil2.setUsername("profil2");
-        profil2.setDescription("description1");
-        profilService.deleteProfil(profil2.getId());
-        Mockito.verify(profilDaoMock).deleteById(profil2.getId());
+        profilService.deleteProfil(profil.getId());
+        Mockito.verify(profilDaoMock).deleteById(profil.getId());
 
     }
 

@@ -1,54 +1,80 @@
 package com.kiddymap.microservicelocation.controller;
 
 import com.kiddymap.microservicelocation.model.Equipment;
-import com.kiddymap.microservicelocation.service.contrat.EquipmentService;
+import com.kiddymap.microservicelocation.service.impl.EquipmentServiceImpl;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+@ExtendWith(MockitoExtension.class)
 public class EquipmentRestControllerTest {
 
     @InjectMocks
     private EquipmentRestController equipmentRestController;
 
     @Mock
-    private EquipmentService equipmentServiceMock;
+    private EquipmentServiceImpl equipmentServiceMock;
+
+
+    private static Equipment equipment;
+
+    private static List<Equipment> equipments;
 
     @BeforeAll
     public static void createListEquipments() {
-        Equipment equipment1 = new Equipment();
-        equipment1.setName("equipment1");
+        equipment = new Equipment();
+        equipment.setId(UUID.randomUUID());
+        equipment.setName("equipment");
 
-        Equipment equipment2 = new Equipment();
-        equipment2.setName("equipment2");
+
+        equipments = new ArrayList<>();
+        equipments.add(equipment);
 
     }
 
     @Test
     void createEquipmentTest(){
+        Mockito.when(equipmentServiceMock.saveEquipment(equipment)).thenReturn(equipment);
+        assertEquals(equipment, equipmentRestController.createEquipment(equipment));
     }
 
     @Test
     void getEquipmentTest(){
+        Mockito.when(equipmentServiceMock.getEquipment(equipment.getId())).thenReturn(Optional.of(equipment));
+        assertEquals(equipment, equipmentRestController.getEquipment(equipment.getId()));
     }
 
     @Test
     void getAllEquipmentsTest(){
-
+        Mockito.when(equipmentServiceMock.getAllEquipments()).thenReturn(equipments);
+        assertEquals(equipments, equipmentRestController.getAllEquipments());
     }
 
     @Test
     void updateEquipmentTest(){
+        Mockito.when(equipmentServiceMock.getEquipment(equipment.getId())).thenReturn(Optional.of(equipment));
+        Mockito.when(equipmentServiceMock.saveEquipment(equipment)).thenReturn(equipment);
+        assertEquals(equipment, equipmentRestController.updateEquipment(equipment.getId(),equipment));
     }
 
     @Test
     void deleteEquipmentTest(){
+        equipmentRestController.deleteEquipment(equipment.getId());
+        Mockito.verify(equipmentServiceMock).deleteEquipment(equipment.getId());
     }
 
-    @Test
-    void saveEquipmentTest(){
-    }
+
 
 
 }

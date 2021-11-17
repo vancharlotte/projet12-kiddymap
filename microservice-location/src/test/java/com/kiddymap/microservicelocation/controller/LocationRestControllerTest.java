@@ -1,13 +1,20 @@
 package com.kiddymap.microservicelocation.controller;
 
 import com.kiddymap.microservicelocation.model.Location;
-import com.kiddymap.microservicelocation.service.contrat.LocationService;
+import com.kiddymap.microservicelocation.service.impl.LocationServiceImpl;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(MockitoExtension.class)
 public class LocationRestControllerTest {
@@ -16,44 +23,56 @@ public class LocationRestControllerTest {
     private LocationRestController locationRestController;
 
     @Mock
-    private LocationService locationServiceMock;
+    private LocationServiceImpl locationServiceMock;
+
+    private static Location location;
+    private static List<Location> locations;
 
     @BeforeAll
     public static void createListLocations() {
-        Location location1 = new Location();
-        location1.setName("location1");
-        location1.setDescription("description1");
+        location = new Location();
+        location.setName("location1");
+        location.setDescription("description1");
 
-        Location location2 = new Location();
-        location2.setName("location2");
-        location2.setDescription("description");
+        locations = new ArrayList<>();
+        locations.add(location);
+
 
     }
 
     @Test
     void createLocationTest(){
+        Mockito.when(locationServiceMock.saveLocation(location)).thenReturn(location);
+        assertEquals(location, locationRestController.createLocation(location));
     }
 
     @Test
     void getLocationTest(){
+        Mockito.when(locationServiceMock.getLocation(location.getId())).thenReturn(Optional.of(location));
+        assertEquals(location, locationRestController.getLocation(location.getId()));
     }
 
     @Test
     void getAllLocationsTest(){
+        Mockito.when(locationServiceMock.getAllLocations()).thenReturn(locations);
+        assertEquals(locations,locationRestController.getAllLocations());
 
     }
 
     @Test
     void updateLocationTest(){
+        Mockito.when(locationServiceMock.getLocation(location.getId())).thenReturn(Optional.of(location));
+        Mockito.when(locationServiceMock.saveLocation(location)).thenReturn(location);
+        assertEquals(location, locationRestController.updateLocation(location.getId(),location));
     }
 
     @Test
     void deleteLocationTest(){
+        locationRestController.deleteLocation(location.getId());
+        Mockito.verify(locationServiceMock).deleteLocation(location.getId());
+
     }
 
-    @Test
-    void saveLocationTest(){
-    }
 
 
 }
