@@ -1,5 +1,6 @@
 package com.kiddymap.microservicelocation.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -15,11 +16,12 @@ public class Equipment {
     @Id
     @GeneratedValue(generator = "UUID2")
     @GenericGenerator( name = "UUID2", strategy = "org.hibernate.id.UUIDGenerator")
-    @Column(name = "id", updatable = false, nullable = false)
+    @Column(name = "equipment_id", updatable = false, nullable = false)
     private UUID id;
 
     private String name;
 
+    @JsonIgnore
     @ManyToMany(mappedBy = "equipments")
-    private List<Location> locations = new ArrayList<>();
+    private List<Location> locations;
 }

@@ -23,7 +23,7 @@ public class GatewayApplication {
 		return builder.routes()
 				.route("microservice-profil", r -> r.path("/profil/**")
 						.uri("lb://microservice-profil"))
-				.route("microservice-location", r -> r.path("/location/**")
+				.route("microservice-location", r -> r.path("/location/**","/equipment/**")
 						.uri("lb://microservice-location"))
 				.build();
 

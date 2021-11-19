@@ -14,7 +14,7 @@ public class Location {
     @Id
     @GeneratedValue(generator = "UUID2")
     @GenericGenerator( name = "UUID2", strategy = "org.hibernate.id.UUIDGenerator")
-    @Column(name = "id", updatable = false, nullable = false)
+    @Column(name = "location_id", updatable = false, nullable = false)
     private UUID id;
 
     private String name;
@@ -24,7 +24,7 @@ public class Location {
     @JoinTable(name = "location_equipment",
             joinColumns = @JoinColumn(name = "location_id"),
             inverseJoinColumns = @JoinColumn(name = "equipment_id"))
-    private List<Location> equipments;
+    private List<Equipment> equipments;
 
 
 
