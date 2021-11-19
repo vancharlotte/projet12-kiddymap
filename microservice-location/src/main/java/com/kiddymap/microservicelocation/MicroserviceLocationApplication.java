@@ -6,6 +6,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @SpringBootApplication
 @EnableSwagger2
+@EnableD
 public class MicroserviceLocationApplication {
 
 	public static void main(String[] args) {
