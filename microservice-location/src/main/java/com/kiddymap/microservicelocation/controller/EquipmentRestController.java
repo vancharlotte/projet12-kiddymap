@@ -1,10 +1,16 @@
 package com.kiddymap.microservicelocation.controller;
 
+import com.kiddymap.microservicelocation.controller.dto.EquipmentDTO;
+import com.kiddymap.microservicelocation.controller.dto.LocationDTO;
 import com.kiddymap.microservicelocation.model.Equipment;
+import com.kiddymap.microservicelocation.model.Location;
 import com.kiddymap.microservicelocation.service.impl.EquipmentServiceImpl;
+import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -13,6 +19,9 @@ public class EquipmentRestController {
 
     @Autowired
     EquipmentServiceImpl equipmentService;
+
+    @Autowired
+    ModelMapper modelMapper;
 
     /**
      * Create - Add a new equipment
@@ -31,10 +40,10 @@ public class EquipmentRestController {
      * @return An equipment object full filled
      */
     @GetMapping("/equipment/{id}")
-    public Equipment getEquipment(@PathVariable("id") final UUID id) {
+    public EquipmentDTO getEquipment(@PathVariable("id") final UUID id) {
         Optional<Equipment> equipment = equipmentService.getEquipment(id);
         if(equipment.isPresent()) {
-            return equipment.get();
+            return modelMapper.map(equipment.get(), EquipmentDTO.class);
         } else {
             return null;
         }
@@ -45,8 +54,10 @@ public class EquipmentRestController {
      * @return - An Iterable object of equipment full filled
      */
     @GetMapping("/equipments")
-    public Iterable<Equipment> getAllEquipments() {
-        return equipmentService.getAllEquipments();
+    public Iterable<EquipmentDTO> getAllEquipments() {
+        Iterable<Equipment> equipmentList = equipmentService.getAllEquipments();
+        return  modelMapper.map(equipmentList, new TypeToken<List<EquipmentDTO>>() {}.getType());
+
     }
 
     /**

@@ -1,8 +1,9 @@
 package com.kiddymap.microserviceprofil.controller;
 
+import com.kiddymap.microserviceprofil.controller.dto.ProfilDTO;
 import com.kiddymap.microserviceprofil.model.Profil;
 import com.kiddymap.microserviceprofil.service.impl.ProfilServiceImpl;
-import io.swagger.annotations.Api;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,6 +15,9 @@ public class ProfilRestController {
 
     @Autowired
     ProfilServiceImpl profilService;
+
+    @Autowired
+    ModelMapper modelMapper;
 
     /**
      * Create - Add a new profil
@@ -32,10 +36,10 @@ public class ProfilRestController {
      * @return A profil object full filled
      */
     @GetMapping("/profil/{id}")
-    public Profil getProfil(@PathVariable("id") final UUID id) {
+    public ProfilDTO getProfil(@PathVariable("id") final UUID id) {
         Optional<Profil> profil = profilService.getProfil(id);
         if(profil.isPresent()) {
-            return profil.get();
+            return modelMapper.map(profil.get(), ProfilDTO.class);
         } else {
             return null;
         }
@@ -48,7 +52,8 @@ public class ProfilRestController {
 
    /* @GetMapping("/profils")
     public Iterable<Profil> getProfils() {
-        return profilService.getProfils();
+        Iterable<Profil> profilList = profilService.getAllProfils();
+        return modelMapper.map(profilList, new TypeToken<List<ProfilDTO>>() {}.getType());
     }*/
 
     /**

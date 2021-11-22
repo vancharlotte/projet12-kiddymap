@@ -1,12 +1,18 @@
 package com.kiddymap.microservicelocation.controller;
 
+import com.kiddymap.microservicelocation.controller.dto.LocationDTO;
 import com.kiddymap.microservicelocation.model.Location;
 import com.kiddymap.microservicelocation.service.impl.LocationServiceImpl;
+import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 
 @RestController
@@ -14,6 +20,10 @@ public class LocationRestController {
 
     @Autowired
     LocationServiceImpl locationService;
+
+    @Autowired
+    ModelMapper modelMapper;
+
 
     /**
      * Create - Add a new location
@@ -32,10 +42,10 @@ public class LocationRestController {
      * @return A location object full filled
      */
     @GetMapping("/location/{id}")
-    public Location getLocation(@PathVariable("id") final UUID id) {
+    public LocationDTO getLocation(@PathVariable("id") final UUID id) {
         Optional<Location> location = locationService.getLocation(id);
         if(location.isPresent()) {
-            return location.get();
+            return modelMapper.map(location.get(), LocationDTO.class);
         } else {
             return null;
         }
@@ -46,8 +56,9 @@ public class LocationRestController {
      * @return - An Iterable object of location full filled
      */
     @GetMapping("/locations")
-    public Iterable<Location> getAllLocations() {
-        return locationService.getAllLocations();
+    public Iterable<LocationDTO> getAllLocations() {
+        Iterable<Location> locationList = locationService.getAllLocations();
+        return  modelMapper.map(locationList, new TypeToken<List<LocationDTO>>() {}.getType());
     }
 
     /**

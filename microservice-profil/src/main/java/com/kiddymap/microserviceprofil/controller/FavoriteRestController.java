@@ -1,10 +1,13 @@
 package com.kiddymap.microserviceprofil.controller;
 
+import com.kiddymap.microserviceprofil.controller.dto.LocationDTO;
 import com.kiddymap.microserviceprofil.model.Location;
 import com.kiddymap.microserviceprofil.model.Profil;
 import com.kiddymap.microserviceprofil.service.impl.LocationServiceImpl;
 import com.kiddymap.microserviceprofil.service.impl.ProfilServiceImpl;
 import io.swagger.annotations.Api;
+import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,6 +24,9 @@ public class FavoriteRestController {
 
     @Autowired
     LocationServiceImpl locationService;
+
+    @Autowired
+    ModelMapper modelMapper;
 
 
     @PutMapping("/profil/favorite/add/{id}")
@@ -60,11 +66,12 @@ public class FavoriteRestController {
 
 
     @GetMapping("/profil/allfavorites/{id}")
-    public List<Location> getProfilAllFavorite(@PathVariable("id") final UUID profilId, @RequestBody Profil profil) {
+    public List<LocationDTO> getProfilAllFavorite(@PathVariable("id") final UUID profilId, @RequestBody Profil profil) {
         Optional<Profil> optionalProfil = profilService.getProfil(profilId);
 
         if (optionalProfil.isPresent()) {
-            return profilService.getAllFavorites(profilId);
+            Iterable<Location> favoritesList = profilService.getAllFavorites(optionalProfil.get().getId());
+            return  modelMapper.map(favoritesList, new TypeToken<List<LocationDTO>>() {}.getType());
 
         } else {
             return null;
