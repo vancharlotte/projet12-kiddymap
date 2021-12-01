@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Optional;
 import java.util.UUID;
 
+@CrossOrigin("*")
 @RestController
 public class ProfilRestController {
 
@@ -35,7 +36,7 @@ public class ProfilRestController {
      * @param id The id of the profil
      * @return A profil object full filled
      */
-    @GetMapping("/profil/{id}")
+    @GetMapping("/profil/get/{id}")
     public ProfilDTO getProfil(@PathVariable("id") final UUID id) {
         Optional<Profil> profil = profilService.getProfil(id);
         if(profil.isPresent()) {
@@ -44,6 +45,7 @@ public class ProfilRestController {
             return null;
         }
     }
+
 
     /**
      * Read - Get all profils
