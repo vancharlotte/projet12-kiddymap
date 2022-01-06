@@ -20,6 +20,8 @@ public class Profil implements Serializable {
     @Column(name = "profil_id", updatable = false, nullable = false)
     private UUID id;
 
+    private String auth0_id;
+
     @Column(name = "username")
     String username;
 

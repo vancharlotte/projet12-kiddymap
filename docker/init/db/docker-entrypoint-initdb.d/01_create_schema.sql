@@ -1,6 +1,7 @@
 
 CREATE TABLE profil (
                                  profil_id UUID PRIMARY KEY,
+                                 user_id VARCHRAR(255) NOT NULL,
                                  username VARCHAR(255) NOT NULL,
                                  description VARCHAR(255) NOT NULL
 );
