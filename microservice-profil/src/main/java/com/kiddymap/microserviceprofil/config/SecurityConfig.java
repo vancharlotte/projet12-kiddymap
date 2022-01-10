@@ -39,7 +39,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authenticated()
                 .and()
                 .cors()
-                .configurationSource(corsConfigurationSource())
+              //  .configurationSource(corsConfigurationSource())
                 .and()
                 .oauth2ResourceServer()
                 .jwt()
@@ -68,7 +68,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return jwtDecoder;
     }
 
-        CorsConfigurationSource corsConfigurationSource() {
+    /*    CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedMethods(List.of(
                 HttpMethod.GET.name(),
@@ -80,7 +80,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration.applyPermitDefaultValues());
         return source;
-    }
+    }*/
 
 
     JwtAuthenticationConverter jwtAuthenticationConverter() {

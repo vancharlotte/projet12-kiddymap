@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Optional;
 import java.util.UUID;
 
-@CrossOrigin("*")
 @RestController
 public class ProfilRestController {
 
