@@ -41,7 +41,7 @@ public class LocationRestController {
      * @param id The id of the location
      * @return A location object full filled
      */
-    @GetMapping("/location/{id}")
+    @GetMapping("/location/get/{id}")
     public LocationDTO getLocation(@PathVariable("id") final UUID id) {
         Optional<Location> location = locationService.getLocation(id);
         if(location.isPresent()) {
