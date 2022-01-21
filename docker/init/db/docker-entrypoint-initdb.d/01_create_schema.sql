@@ -1,7 +1,6 @@
 
 CREATE TABLE profil (
                                  profil_id UUID PRIMARY KEY,
-                                 user_id VARCHRAR(255) NOT NULL,
                                  username VARCHAR(255) NOT NULL,
                                  description VARCHAR(255) NOT NULL
 );
@@ -9,8 +8,11 @@ CREATE TABLE profil (
 
 CREATE TABLE location (
                                    location_id UUID PRIMARY KEY,
+                                   longitude FLOAT NOT NULL,
+                                   latitude FLOAT NOT NULL,
                                    name VARCHAR(50) NOT NULL,
                                    description VARCHAR(150) NOT NULL
+
 );
 
 CREATE TABLE equipment (

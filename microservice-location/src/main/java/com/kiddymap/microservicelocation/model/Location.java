@@ -16,6 +16,8 @@ public class Location {
     @GenericGenerator( name = "UUID2", strategy = "org.hibernate.id.UUIDGenerator")
     @Column(name = "location_id", updatable = false, nullable = false)
     private UUID id;
+    private float longitude;
+    private float latitude;
 
     private String name;
     private String description;

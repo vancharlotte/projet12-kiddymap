@@ -19,7 +19,8 @@ public class Location implements Serializable {
     @GenericGenerator( name = "UUID2", strategy = "org.hibernate.id.UUIDGenerator")
     @Column(name = "location_id", updatable = false, nullable = false)
     private UUID id;
-
+    private int longitude;
+    private int latitude;
     private String name;
 
     private String description;
