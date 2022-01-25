@@ -59,15 +59,16 @@ public class LocationRestController {
         return  modelMapper.map(locationList, new TypeToken<List<LocationDTO>>() {}.getType());
     }
 
-    @GetMapping("/location/getAllGeoJson")
-    public JSONObject getAllLocationsGeoJson() {
+    @GetMapping("/location/getAllGeoJson/{minLat}/{maxLat}/{minLong}/{maxLong}")
+    public JSONObject getAllLocationsGeoJson(@PathVariable("minLat") float minLat, @PathVariable("maxLat") float maxLat, @PathVariable("minLong")float minLong, @PathVariable("maxLong")float maxLong) {
         JSONObject featureCollection = new JSONObject();
-
+        System.out.println("minLat : " + minLat + ", maxLat : " + maxLat);
         featureCollection.put("type", "featureCollection");
 
             JSONArray featureList = new JSONArray();
 
-            for (Location obj : locationService.getAllLocations()) {
+           // for (Location obj : locationService.getAllLocations()) {
+         for (Location obj : locationService.getAllLocationsInBetween(minLat,maxLat,minLong,maxLong)) {
 
                 JSONObject point = new JSONObject();
 

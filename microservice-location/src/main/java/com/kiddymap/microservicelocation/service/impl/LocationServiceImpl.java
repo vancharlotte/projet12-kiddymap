@@ -37,4 +37,11 @@ public class LocationServiceImpl implements LocationService {
     public void deleteLocation(UUID id) {
         locationDao.deleteById(id);
     }
+
+    @Override
+    public Iterable<Location> getAllLocationsInBetween(float minLat, float maxLat, float minLong, float maxLong) {
+        return locationDao.findAllLocationInBetween(minLat,maxLat,minLong,maxLong);
+    }
+
+
 }

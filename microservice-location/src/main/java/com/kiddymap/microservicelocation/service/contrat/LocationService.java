@@ -14,4 +14,8 @@ public interface LocationService {
     Iterable<Location> getAllLocations();
 
     void deleteLocation(UUID id);
+
+    Iterable<Location> getAllLocationsInBetween(float minLat, float maxLat, float minLong, float maxLong);
+
+
 }
