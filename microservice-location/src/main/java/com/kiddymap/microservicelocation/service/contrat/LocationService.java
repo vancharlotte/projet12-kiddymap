@@ -17,5 +17,5 @@ public interface LocationService {
 
     Iterable<Location> getAllLocationsInBetween(float minLat, float maxLat, float minLong, float maxLong);
 
-
+    boolean existLocation(float latitude,float longitude);
 }

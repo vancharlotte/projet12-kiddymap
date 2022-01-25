@@ -15,4 +15,6 @@ public interface LocationDao extends JpaRepository<Location, UUID> {
             value = "SELECT l FROM Location l Where latitude Between :minLat And :maxLat And longitude Between :minLong And :maxLong")
     Collection<Location> findAllLocationInBetween(float minLat, float maxLat, float minLong, float maxLong);
 
+
+    boolean existsByLatitudeAndLongitude(float latitude, float longitude);
 }

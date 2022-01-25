@@ -50,6 +50,17 @@ public class LocationRestController {
     }
 
     /**
+     * Read - Exist
+     * @param lat the lat of the location, long the long of the location
+     * @return A location object full filled
+     */
+    @GetMapping("/location/exist/{lat}/{long}")
+    public boolean existLocation(@PathVariable("lat") float latitude, @PathVariable("long") float longitude) {
+        return locationService.existLocation(latitude,longitude);
+
+    }
+
+    /**
      * Read - Get all locations
      * @return - An Iterable object of location full filled
      */

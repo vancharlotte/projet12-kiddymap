@@ -43,5 +43,12 @@ public class LocationServiceImpl implements LocationService {
         return locationDao.findAllLocationInBetween(minLat,maxLat,minLong,maxLong);
     }
 
+    @Override
+    public boolean existLocation(float latitude, float longitude) {
+        boolean exist = locationDao.existsByLatitudeAndLongitude(latitude,longitude);
+        System.out.println("location exists ?");
+        return exist;
+    }
+
 
 }
