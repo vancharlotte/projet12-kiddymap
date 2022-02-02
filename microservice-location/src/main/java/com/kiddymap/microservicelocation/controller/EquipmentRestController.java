@@ -1,9 +1,7 @@
 package com.kiddymap.microservicelocation.controller;
 
 import com.kiddymap.microservicelocation.controller.dto.EquipmentDTO;
-import com.kiddymap.microservicelocation.controller.dto.LocationDTO;
 import com.kiddymap.microservicelocation.model.Equipment;
-import com.kiddymap.microservicelocation.model.Location;
 import com.kiddymap.microservicelocation.service.impl.EquipmentServiceImpl;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;

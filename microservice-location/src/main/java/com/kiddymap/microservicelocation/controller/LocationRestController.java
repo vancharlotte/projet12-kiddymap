@@ -28,7 +28,7 @@ public class LocationRestController {
      * @param location An object location
      * @return The location object saved
      */
-    @PostMapping("/location")
+    @PostMapping("/location/add")
     public Location createLocation(@RequestBody Location location) {
         return locationService.saveLocation(location);
     }
@@ -51,7 +51,7 @@ public class LocationRestController {
 
     /**
      * Read - Exist
-     * @param lat the lat of the location, long the long of the location
+     * @param latitude the lat of the location, long the long of the location
      * @return A location object full filled
      */
     @GetMapping("/location/exist/{lat}/{long}")
@@ -71,7 +71,7 @@ public class LocationRestController {
     }
 
     @GetMapping("/location/getAllGeoJson/{minLat}/{maxLat}/{minLong}/{maxLong}")
-    public JSONObject getAllLocationsGeoJson(@PathVariable("minLat") float minLat, @PathVariable("maxLat") float maxLat, @PathVariable("minLong")float minLong, @PathVariable("maxLong")float maxLong) {
+    public JSONObject getLocationsGeoJsonInBetween(@PathVariable("minLat") float minLat, @PathVariable("maxLat") float maxLat, @PathVariable("minLong")float minLong, @PathVariable("maxLong")float maxLong) {
         JSONObject featureCollection = new JSONObject();
         System.out.println("minLat : " + minLat + ", maxLat : " + maxLat);
         featureCollection.put("type", "featureCollection");
@@ -108,7 +108,7 @@ public class LocationRestController {
      * @param location - The location object updated
      * @return
      */
-    @PutMapping("/location/{id}")
+    @PutMapping("/location/update/{id}")
     public Location updateLocation (@PathVariable("id") final UUID id, @RequestBody Location location) {
         Optional<Location> e = locationService.getLocation(id);
         if (e.isPresent()) {
@@ -131,7 +131,7 @@ public class LocationRestController {
      * Delete - Delete a location
      * @param id - The id of the location to delete
      */
-    @DeleteMapping("/location/{id}")
+    @DeleteMapping("/location/delete/{id}")
     public void deleteLocation(@PathVariable("id") final UUID id) {
         locationService.deleteLocation(id);
     }

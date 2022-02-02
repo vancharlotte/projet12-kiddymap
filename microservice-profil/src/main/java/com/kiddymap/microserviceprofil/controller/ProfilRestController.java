@@ -24,7 +24,7 @@ public class ProfilRestController {
      * @param profil An object profil
      * @return The profil object saved
      */
-    @PostMapping("/profil")
+    @PostMapping("/profil/add")
     public Profil createProfil(@RequestBody Profil profil) {
         return profilService.saveProfil(profil);
     }
@@ -63,7 +63,7 @@ public class ProfilRestController {
      * @param profil - The profil object updated
      * @return
      */
-    @PutMapping("/profil/{id}")
+    @PutMapping("/profil/update/{id}")
     public Profil updateProfil(@PathVariable("id") final UUID id, @RequestBody Profil profil) {
         Optional<Profil> e = profilService.getProfil(id);
         if (e.isPresent()) {
@@ -86,7 +86,7 @@ public class ProfilRestController {
      * Delete - Delete an profil
      * @param id - The id of the profil to delete
      */
-    @DeleteMapping("/profil/{id}")
+    @DeleteMapping("/profil/delete/{id}")
     public void deleteProfil(@PathVariable("id") final UUID id) {
         profilService.deleteProfil(id);
     }

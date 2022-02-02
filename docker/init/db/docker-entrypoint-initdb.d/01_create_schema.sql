@@ -1,6 +1,7 @@
 
 CREATE TABLE profil (
                                  profil_id UUID PRIMARY KEY,
+                                 auth_id VARCHAR(100) NULL,
                                  username VARCHAR(255) NOT NULL,
                                  description VARCHAR(255) NOT NULL
 );
@@ -10,8 +11,8 @@ CREATE TABLE location (
                                    location_id UUID PRIMARY KEY,
                                    longitude FLOAT NOT NULL,
                                    latitude FLOAT NOT NULL,
-                                   name VARCHAR(50) NOT NULL,
-                                   description VARCHAR(150) NOT NULL
+                                   name VARCHAR(100) NOT NULL,
+                                   description VARCHAR(255) NOT NULL
 
 );
 
