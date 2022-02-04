@@ -11,6 +11,8 @@ public class ProfilDTO {
 
     private UUID id;
 
+    private String authId;
+
     private String username;
 
     private String description;

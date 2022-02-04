@@ -45,6 +45,21 @@ public class ProfilRestController {
         }
     }
 
+    /**
+     * Read - Get one profil
+     * @param authId The id of the profil
+     * @return A profil object full filled
+     */
+    @GetMapping("/profil/get/auth/{authId}")
+    public ProfilDTO getProfilByAuthId(@PathVariable("authId") final String authId) {
+        Optional<Profil> profil = profilService.getProfilByAuthId(authId);
+        if(profil.isPresent()) {
+            return modelMapper.map(profil.get(), ProfilDTO.class);
+        } else {
+            return null;
+        }
+    }
+
 
     /**
      * Read - Get all profils

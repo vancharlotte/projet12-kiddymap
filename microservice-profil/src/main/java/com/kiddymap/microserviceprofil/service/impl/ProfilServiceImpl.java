@@ -26,6 +26,11 @@ public class ProfilServiceImpl implements ProfilService {
     }
 
     @Override
+    public Optional<Profil> getProfilByAuthId(String authId) {
+        return profilDao.findByAuthId(authId);
+    }
+
+    @Override
     public Profil updateProfil(Profil profil) {
         return profilDao.save(profil);
     }

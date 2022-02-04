@@ -23,4 +23,6 @@ public interface ProfilService {
     Profil deleteProfilFavorite(Location location, Profil profil);
 
     List<Location> getAllFavorites(UUID id);
+
+    Optional<Profil> getProfilByAuthId(String authId);
 }
