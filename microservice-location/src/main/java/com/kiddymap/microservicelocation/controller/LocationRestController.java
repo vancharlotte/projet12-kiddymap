@@ -31,6 +31,9 @@ public class LocationRestController {
      */
     @PostMapping("/location/add")
     public Location createLocation(@RequestBody Location location) {
+
+        System.out.println(location.getName());
+
         return locationService.saveLocation(location);
     }
 
@@ -45,8 +48,11 @@ public class LocationRestController {
     public LocationDTO getLocation(@PathVariable("id") final UUID id) {
         Optional<Location> location = locationService.getLocation(id);
         if (location.isPresent()) {
+            System.out.println("id");
             return modelMapper.map(location.get(), LocationDTO.class);
         } else {
+            System.out.println("null");
+
             return null;
         }
     }
@@ -98,8 +104,10 @@ public class LocationRestController {
             point.put("coordinates", coordinates);
 
             JSONObject properties = new JSONObject();
+            properties.put("id", obj.getId());
             properties.put("name", obj.getName());
             properties.put("description", obj.getDescription());
+
          //   properties.put("equipment", obj.getEquipments());
 
             feature.put("geometry", point);

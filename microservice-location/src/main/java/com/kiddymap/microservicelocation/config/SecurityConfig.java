@@ -32,7 +32,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .mvcMatchers("/location/getAllGeoJson/**").permitAll()
                 .mvcMatchers("/location/exist/**").permitAll()
 
-                .mvcMatchers("/location/get/**").hasAuthority("access:data")
+                .mvcMatchers("/location/add/**").permitAll()
+                .mvcMatchers("/location/get/**").permitAll()
+
+//                .mvcMatchers("/location/get/**").hasAuthority("access:data")
                 .anyRequest()
                 .authenticated()
                 .and()

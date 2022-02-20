@@ -1,6 +1,8 @@
 package com.kiddymap.microserviceprofil.service.impl;
 
+import com.kiddymap.microserviceprofil.dao.FavoriteDao;
 import com.kiddymap.microserviceprofil.dao.ProfilDao;
+import com.kiddymap.microserviceprofil.model.Favorite;
 import com.kiddymap.microserviceprofil.model.Location;
 import com.kiddymap.microserviceprofil.model.Profil;
 import com.kiddymap.microserviceprofil.service.contrat.ProfilService;
@@ -19,6 +21,9 @@ public class ProfilServiceImpl implements ProfilService {
     @Autowired
     ProfilDao profilDao;
 
+    @Autowired
+    FavoriteDao favoriteDao;
+
 
     @Override
     public Optional<Profil> getProfil(final UUID id) {
@@ -29,6 +34,7 @@ public class ProfilServiceImpl implements ProfilService {
     public Optional<Profil> getProfilByAuthId(String authId) {
         return profilDao.findByAuthId(authId);
     }
+
 
     @Override
     public Profil updateProfil(Profil profil) {
@@ -70,7 +76,10 @@ public class ProfilServiceImpl implements ProfilService {
         }
     }
 
-
+    @Override
+    public Optional<Favorite> existFavorite(UUID profilId, UUID locationId) {
+    return favoriteDao.findByProfilIdAndLocationId(profilId, locationId);
+    }
 
 
 }

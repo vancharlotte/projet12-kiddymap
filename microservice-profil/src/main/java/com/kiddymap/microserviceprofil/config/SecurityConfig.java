@@ -34,7 +34,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .mvcMatchers("/profil/get/**").hasAuthority("access:data")
+                .mvcMatchers("/profil/favorite/**").permitAll()
+                .mvcMatchers("/profil/add").permitAll()
+              //  .mvcMatchers("/profil/get/**").permitAll()
+              .mvcMatchers("/profil/get/**").permitAll()
                 .anyRequest()
                 .authenticated()
                 .and()

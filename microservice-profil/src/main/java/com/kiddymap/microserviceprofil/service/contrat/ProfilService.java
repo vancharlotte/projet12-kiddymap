@@ -1,5 +1,6 @@
 package com.kiddymap.microserviceprofil.service.contrat;
 
+import com.kiddymap.microserviceprofil.model.Favorite;
 import com.kiddymap.microserviceprofil.model.Location;
 import com.kiddymap.microserviceprofil.model.Profil;
 
@@ -25,4 +26,10 @@ public interface ProfilService {
     List<Location> getAllFavorites(UUID id);
 
     Optional<Profil> getProfilByAuthId(String authId);
+
+    Optional<Favorite> existFavorite(UUID profilId, UUID locationId);
+
+
+
+
 }

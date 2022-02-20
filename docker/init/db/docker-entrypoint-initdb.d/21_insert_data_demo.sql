@@ -64,7 +64,6 @@
     ('fa65b93d-1357-4dbd-8a6b-1aa49ffb5179',3.0533192,50.6323124993175,'Carré des Halles','description du lieu'),
     ('a8b07bf2-f693-4a66-ad9c-dbd5a45152e8',3.0531931,50.6322444993176,'La Ducasse','description du lieu'),
     ('18b2aeda-c4de-442c-9fbb-fcc7ab256eb9',3.0687399,50.6385356993163,'Le Black Night','description du lieu'),
-
     ('7336bda9-5019-492f-9345-868550394856',3.0684225,50.6363789993168,'Le Priez','description du lieu'),
     ('7c45baa7-fa33-4bee-b74d-fa66c241cb8d',3.0631737,50.6386494993163,'Les Compagnons de la Grappe','description du lieu'),
     ('3541c489-9c4d-43a4-a122-cce46ced97a1',3.0623798,50.6411916993158,'La Petite Table','description du lieu'),

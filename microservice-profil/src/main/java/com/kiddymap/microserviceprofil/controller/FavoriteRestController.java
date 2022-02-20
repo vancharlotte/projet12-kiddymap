@@ -1,6 +1,7 @@
 package com.kiddymap.microserviceprofil.controller;
 
 import com.kiddymap.microserviceprofil.controller.dto.LocationDTO;
+import com.kiddymap.microserviceprofil.model.Favorite;
 import com.kiddymap.microserviceprofil.model.Location;
 import com.kiddymap.microserviceprofil.model.Profil;
 import com.kiddymap.microserviceprofil.service.impl.LocationServiceImpl;
@@ -15,7 +16,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-@Api
+
 @RestController
 public class FavoriteRestController {
 
@@ -76,6 +77,26 @@ public class FavoriteRestController {
         } else {
             return null;
         }
+
+    }
+
+
+    @GetMapping("/profil/favorite/exist/{profilId}/{locationId}")
+    public boolean existProfilFavorite(@PathVariable("profilId") final UUID profilId, @PathVariable("locationId") final UUID locationId) {
+        System.out.println("look if favorite exist");
+
+        Optional<Favorite> optionalFavorite = profilService.existFavorite(profilId, locationId);
+
+        if (optionalFavorite.isPresent()) {
+            System.out.println("favorite");
+
+            return true;
+        } else {
+            System.out.println("not favorite");
+
+            return false;
+        }
+
 
     }
 
