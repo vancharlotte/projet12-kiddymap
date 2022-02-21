@@ -26,7 +26,21 @@ public class ProfilRestController {
      */
     @PostMapping("/profil/add")
     public Profil createProfil(@RequestBody Profil profil) {
-        return profilService.saveProfil(profil);
+        System.out.println("profil ?");
+
+        Optional<Profil> thisProfil = profilService.getProfilByAuthId(profil.getAuthId());
+        if (thisProfil.isPresent()) {
+            System.out.println("profil already exist");
+            return thisProfil.get();
+        }
+        else{
+            Profil newProfil = new  Profil();
+            newProfil.setAuthId(profil.getAuthId());
+            newProfil.setUsername(profil.getUsername());
+            newProfil.setDescription("à compléter");
+            System.out.println("save new profil");
+
+            return profilService.saveProfil(newProfil);}
     }
 
 
@@ -35,7 +49,7 @@ public class ProfilRestController {
      * @param id The id of the profil
      * @return A profil object full filled
      */
-    @GetMapping("/profil/get/{id}")
+    @GetMapping("/profil/get/id/{id}")
     public ProfilDTO getProfil(@PathVariable("id") final UUID id) {
         Optional<Profil> profil = profilService.getProfil(id);
         if(profil.isPresent()) {
