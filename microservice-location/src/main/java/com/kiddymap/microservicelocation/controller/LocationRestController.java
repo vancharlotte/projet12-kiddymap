@@ -120,7 +120,7 @@ public class LocationRestController {
         }
 
         featureCollection.put("features", featureList);
-        System.out.println(featureCollection.toString());
+       // System.out.println(featureCollection.toString());
 
         return featureCollection;
     }

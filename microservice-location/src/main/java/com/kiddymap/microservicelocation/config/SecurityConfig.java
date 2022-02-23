@@ -35,6 +35,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .mvcMatchers("/location/add/**").permitAll()
                 .mvcMatchers("/location/get/**").permitAll()
 
+                .mvcMatchers("/location/equipment/**").permitAll()
+
+
 //                .mvcMatchers("/location/get/**").hasAuthority("access:data")
                 .anyRequest()
                 .authenticated()

@@ -12,5 +12,4 @@ public class EquipmentDTO {
     private UUID id;
 
     private String name;
-
-    private List<Location> locations;}
+}
