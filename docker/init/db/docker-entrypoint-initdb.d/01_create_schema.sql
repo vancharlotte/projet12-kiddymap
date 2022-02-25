@@ -3,6 +3,7 @@ CREATE TABLE profil (
                                  profil_id UUID PRIMARY KEY,
                                  auth_id VARCHAR(100) NULL,
                                  username VARCHAR(255) NOT NULL,
+                                 email VARCHAR(255) NOT NULL,
                                  description VARCHAR(255) NOT NULL
 );
 

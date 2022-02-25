@@ -15,6 +15,8 @@ public class ProfilDTO {
 
     private String username;
 
+    private String email;
+
     private String description;
 
     private List<Location> favoriteLocations;

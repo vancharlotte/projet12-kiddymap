@@ -38,6 +38,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .mvcMatchers("/profil/add").permitAll()
                .mvcMatchers("/profil/auth/**").permitAll()
               .mvcMatchers("/profil/get/**").permitAll()
+                .mvcMatchers("/profil/update/**").permitAll()
                 .anyRequest()
                 .authenticated()
                 .and()

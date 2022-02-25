@@ -102,13 +102,19 @@ public class ProfilRestController {
      */
     @PutMapping("/profil/update/{id}")
     public Profil updateProfil(@PathVariable("id") final UUID id, @RequestBody Profil profil) {
+        System.out.println("profil" + profil.toString());
         Optional<Profil> e = profilService.getProfil(id);
         if (e.isPresent()) {
             Profil currentProfil = e.get();
+            currentProfil.setAuthId(profil.getAuthId());
+            currentProfil.setUsername(profil.getUsername());
+            currentProfil.setDescription(profil.getDescription());
+            currentProfil.setFavoriteLocations(profil.getFavoriteLocations());
 
-            String username = profil.getUsername();
-            if (username != null) {
-                currentProfil.setUsername(username);
+            String username = profil.getEmail();
+            if (currentProfil.getEmail() != profil.getEmail()) {
+                // service to change email to auth0
+                currentProfil.setEmail(profil.getEmail());
             }
 
                 profilService.saveProfil(currentProfil);

@@ -26,6 +26,9 @@ public class Profil implements Serializable {
     @Column(name = "username")
     String username;
 
+    @Column(name = "email")
+    String email;
+
     @Column(name = "description")
     String description;
 
