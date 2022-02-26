@@ -1,11 +1,8 @@
 package com.kiddymap.microserviceprofil.service.impl;
 
 import com.nimbusds.jose.shaded.json.JSONObject;
-import org.apache.http.client.HttpClient;
-import org.apache.http.impl.client.HttpClientBuilder;
-import org.springframework.context.annotation.Bean;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
-import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.client.RestTemplate;
 
@@ -13,14 +10,8 @@ import org.springframework.web.client.RestTemplate;
 @Repository
 public class AuthServiceImpl {
 
-    @Bean
-    public RestTemplate restTemplate(){
-        RestTemplate restTemplate = new RestTemplate();
-        HttpClient httpClient = HttpClientBuilder.create().build();
-        HttpComponentsClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory(httpClient);
-        restTemplate.setRequestFactory(requestFactory);
-        return restTemplate;
-    }
+    @Autowired
+    RestTemplate restTemplate;
 
     public ResponseEntity<JSONObject> getTokenAuth() {
         JSONObject ob = new JSONObject();
@@ -40,6 +31,48 @@ public class AuthServiceImpl {
 
         System.out.println(response.getBody());
         return response;
+    }
+
+    public ResponseEntity<String> updateEmail(String authId, String email) {
+
+        ResponseEntity<JSONObject> token = getTokenAuth();
+        String url = "https://dev-kiddymap.eu.auth0.com/api/v2/users/" + authId;
+
+        System.out.println(email);
+        String body = "{\n" +
+                "  \"email\": \"" + email + " \"\n" +
+                "}";
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.setBearerAuth(token.getBody().get("access_token").toString());
+        HttpEntity<String> httpEntity = new HttpEntity<>(body, headers);
+
+        ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.PATCH, httpEntity, String.class);
+        System.out.println(response.getBody());
+        return response;
+    }
+
+    public ResponseEntity<String> addRoleToUser(String id) {
+
+        ResponseEntity<JSONObject> token = getTokenAuth();
+        String url = "https://dev-kiddymap.eu.auth0.com/api/v2/users/" + id + "/roles";
+
+        String role = "{\n" +
+                "  \"roles\": [\n" +
+                "    \"rol_i5CMLwfMDGx1xBQG\"\n" +
+                "  ]\n" +
+                "}";
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.setBearerAuth(token.getBody().get("access_token").toString());
+
+        HttpEntity<String> httpEntity = new HttpEntity<>(role, headers);
+        ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.POST, httpEntity, String.class);
+        System.out.println(response.getBody());
+        return response;
+
     }
 
 }

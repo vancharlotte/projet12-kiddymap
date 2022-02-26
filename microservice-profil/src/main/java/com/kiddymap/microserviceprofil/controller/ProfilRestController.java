@@ -2,6 +2,7 @@ package com.kiddymap.microserviceprofil.controller;
 
 import com.kiddymap.microserviceprofil.controller.dto.ProfilDTO;
 import com.kiddymap.microserviceprofil.model.Profil;
+import com.kiddymap.microserviceprofil.service.impl.AuthServiceImpl;
 import com.kiddymap.microserviceprofil.service.impl.ProfilServiceImpl;
 import com.nimbusds.jose.shaded.json.JSONObject;
 import org.modelmapper.ModelMapper;
@@ -21,6 +22,9 @@ public class ProfilRestController {
 
     @Autowired
     ProfilServiceImpl profilService;
+
+    @Autowired
+    AuthServiceImpl authService;
 
     @Autowired
     ModelMapper modelMapper;
@@ -45,6 +49,7 @@ public class ProfilRestController {
             newProfil.setUsername(profil.getUsername());
             newProfil.setDescription("à compléter");
             System.out.println("save new profil");
+            authService.addRoleToUser(profil.getAuthId());
 
             return profilService.saveProfil(newProfil);}
     }
@@ -113,7 +118,7 @@ public class ProfilRestController {
 
             String username = profil.getEmail();
             if (currentProfil.getEmail() != profil.getEmail()) {
-                // service to change email to auth0
+                authService.updateEmail(profil.getAuthId(), profil.getEmail());
                 currentProfil.setEmail(profil.getEmail());
             }
 

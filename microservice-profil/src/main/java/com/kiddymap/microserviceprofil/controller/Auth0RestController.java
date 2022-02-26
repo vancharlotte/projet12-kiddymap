@@ -29,7 +29,6 @@ public class Auth0RestController {
         ob.put("connection", "Username-Password-Authentication");
 
         String url = "https://dev-kiddymap.eu.auth0.com/dbconnections/signup";
-        System.out.println(ob.toString());
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -42,55 +41,6 @@ public class Auth0RestController {
 
     }
 
-    @PostMapping("/profil/auth/add/roles")
-    public ResponseEntity<String> addRoleToUser(@RequestBody String id) {
-
-        ResponseEntity<JSONObject> token = authService.getTokenAuth();
-        token.getBody().get("access_token");
-        String url = "https://dev-kiddymap.eu.auth0.com/api/v2/users/" + id + "/roles";
-        System.out.println(token.getBody().get("access_token"));
-
-    String role = "{\n" +
-            "  \"roles\": [\n" +
-            "    \"rol_i5CMLwfMDGx1xBQG\"\n" +
-            "  ]\n" +
-            "}";
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.setBearerAuth(token.getBody().get("access_token").toString());
-        HttpEntity<String> httpEntity = new HttpEntity<>(role, headers);
-        RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.POST, httpEntity, String.class);
-        System.out.println(response.getBody());
-        return response;
-
-    }
-
-    @PostMapping("/profil/auth/update/email")
-    public ResponseEntity<String> updateEmail(@RequestBody Profil profil) {
-
-        ResponseEntity<JSONObject> token = authService.getTokenAuth();
-        token.getBody().get("access_token");
-        String url = "https://dev-kiddymap.eu.auth0.com/api/v2/users/" + profil.getAuthId() ;
-
-        System.out.println(profil.getEmail());
-        String email = "{\n" +
-                "  \"email\": \"asticot@gmail.com\"\n" +
-                "}";
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.setBearerAuth(token.getBody().get("access_token").toString());
-        HttpEntity<String> httpEntity = new HttpEntity<>(email, headers);
-        ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.PATCH, httpEntity, String.class);
-        System.out.println(response.getBody());
-        return response;
-
-
-
-
-    }
 
     @GetMapping("/profil/auth/get/allUsers")
     public ResponseEntity<String> getAllAuth() {
