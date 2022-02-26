@@ -1,13 +1,26 @@
 package com.kiddymap.microserviceprofil.service.impl;
 
 import com.nimbusds.jose.shaded.json.JSONObject;
+import org.apache.http.client.HttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
+import org.springframework.context.annotation.Bean;
 import org.springframework.http.*;
+import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.stereotype.Repository;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.client.RestTemplate;
+
 
 @Repository
 public class AuthServiceImpl {
+
+    @Bean
+    public RestTemplate restTemplate(){
+        RestTemplate restTemplate = new RestTemplate();
+        HttpClient httpClient = HttpClientBuilder.create().build();
+        HttpComponentsClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory(httpClient);
+        restTemplate.setRequestFactory(requestFactory);
+        return restTemplate;
+    }
 
     public ResponseEntity<JSONObject> getTokenAuth() {
         JSONObject ob = new JSONObject();

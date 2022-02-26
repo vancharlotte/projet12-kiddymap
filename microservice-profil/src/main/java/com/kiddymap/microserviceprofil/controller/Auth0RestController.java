@@ -16,6 +16,9 @@ public class Auth0RestController {
     @Autowired
     AuthServiceImpl authService;
 
+    @Autowired
+    RestTemplate restTemplate;
+
     @GetMapping("/profil/auth/add/signup")
     public ResponseEntity<String> accessAuth(@RequestBody JSONObject ob) {
        // JSONObject ob = new JSONObject();
@@ -64,7 +67,7 @@ public class Auth0RestController {
 
     }
 
-    @PatchMapping("/profil/auth/update/email")
+    @PostMapping("/profil/auth/update/email")
     public ResponseEntity<String> updateEmail(@RequestBody Profil profil) {
 
         ResponseEntity<JSONObject> token = authService.getTokenAuth();
@@ -80,10 +83,12 @@ public class Auth0RestController {
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.setBearerAuth(token.getBody().get("access_token").toString());
         HttpEntity<String> httpEntity = new HttpEntity<>(email, headers);
-        RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.PATCH, httpEntity, Void.class);
+        ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.PATCH, httpEntity, String.class);
         System.out.println(response.getBody());
         return response;
+
+
+
 
     }
 
