@@ -1,5 +1,6 @@
 package com.kiddymap.microserviceprofil.controller;
 
+import com.kiddymap.microserviceprofil.model.Profil;
 import com.kiddymap.microserviceprofil.service.impl.AuthServiceImpl;
 import com.nimbusds.jose.shaded.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,6 +59,29 @@ public class Auth0RestController {
         HttpEntity<String> httpEntity = new HttpEntity<>(role, headers);
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.POST, httpEntity, String.class);
+        System.out.println(response.getBody());
+        return response;
+
+    }
+
+    @PatchMapping("/profil/auth/update/email")
+    public ResponseEntity<String> updateEmail(@RequestBody Profil profil) {
+
+        ResponseEntity<JSONObject> token = authService.getTokenAuth();
+        token.getBody().get("access_token");
+        String url = "https://dev-kiddymap.eu.auth0.com/api/v2/users/" + profil.getAuthId() ;
+
+        System.out.println(profil.getEmail());
+        String email = "{\n" +
+                "  \"email\": \"asticot@gmail.com\"\n" +
+                "}";
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.setBearerAuth(token.getBody().get("access_token").toString());
+        HttpEntity<String> httpEntity = new HttpEntity<>(email, headers);
+        RestTemplate restTemplate = new RestTemplate();
+        ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.PATCH, httpEntity, Void.class);
         System.out.println(response.getBody());
         return response;
 

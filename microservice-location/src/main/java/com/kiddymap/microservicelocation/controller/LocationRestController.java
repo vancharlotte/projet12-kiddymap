@@ -137,11 +137,11 @@ public class LocationRestController {
         Optional<Location> e = locationService.getLocation(id);
         if (e.isPresent()) {
             Location currentLocation = e.get();
-
-            String name = location.getName();
-            if (name != null) {
-                currentLocation.setName(name);
-            }
+            currentLocation.setLongitude(location.getLongitude());
+            currentLocation.setLatitude(location.getLatitude());
+            currentLocation.setName(location.getName());
+            currentLocation.setDescription(location.getDescription());
+            currentLocation.setEquipments(location.getEquipments());
 
             locationService.saveLocation(currentLocation);
             return currentLocation;

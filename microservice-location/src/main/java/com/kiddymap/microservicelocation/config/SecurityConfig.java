@@ -31,6 +31,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
                 .mvcMatchers("/location/getAllGeoJson/**").permitAll()
                 .mvcMatchers("/location/exist/**").permitAll()
+                .mvcMatchers("/location/update/**").permitAll()
 
                 .mvcMatchers("/location/add/**").permitAll()
                 .mvcMatchers("/location/get/**").permitAll()
