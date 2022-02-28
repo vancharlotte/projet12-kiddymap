@@ -4,17 +4,11 @@ import com.kiddymap.microserviceprofil.controller.dto.ProfilDTO;
 import com.kiddymap.microserviceprofil.model.Profil;
 import com.kiddymap.microserviceprofil.service.impl.AuthServiceImpl;
 import com.kiddymap.microserviceprofil.service.impl.ProfilServiceImpl;
-import com.nimbusds.jose.shaded.json.JSONObject;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.*;
-import org.springframework.http.client.ClientHttpRequestInterceptor;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
 
-import java.net.URI;
+import org.springframework.web.bind.annotation.*;
+
 import java.util.*;
 
 @RestController
@@ -64,6 +58,7 @@ public class ProfilRestController {
      */
     @GetMapping("/profil/get/id/{id}")
     public ProfilDTO getProfil(@PathVariable("id") final UUID id) {
+
         Optional<Profil> profil = profilService.getProfil(id);
         if(profil.isPresent()) {
             return modelMapper.map(profil.get(), ProfilDTO.class);
