@@ -1,10 +1,15 @@
 package com.kiddymap.microservicelocation.controller;
 
+import com.kiddymap.microservicelocation.controller.dto.EquipmentDTO;
 import com.kiddymap.microservicelocation.controller.dto.LocationDTO;
+import com.kiddymap.microservicelocation.controller.dto.LocationIncompleteDTO;
+import com.kiddymap.microservicelocation.model.Equipment;
 import com.kiddymap.microservicelocation.model.Location;
+import com.kiddymap.microservicelocation.service.impl.EquipmentServiceImpl;
 import com.kiddymap.microservicelocation.service.impl.LocationServiceImpl;
 import com.nimbusds.jose.shaded.json.JSONArray;
 import com.nimbusds.jose.shaded.json.JSONObject;
+import org.apache.commons.lang.ObjectUtils;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +25,9 @@ public class LocationRestController {
     LocationServiceImpl locationService;
 
     @Autowired
+    EquipmentServiceImpl equipmentService;
+
+    @Autowired
     ModelMapper modelMapper;
 
 
@@ -30,11 +38,27 @@ public class LocationRestController {
      * @return The location object saved
      */
     @PostMapping("/location/add")
-    public Location createLocation(@RequestBody Location location) {
+    public Location createLocation(@RequestBody LocationIncompleteDTO location) {
 
-        System.out.println(location.getName());
+        List<UUID> equipments =  location.getEquipments();
+        List<Equipment> newEquipments = new ArrayList<>();
 
-        return locationService.saveLocation(location);
+        for( int i=0; i<equipments.size(); i++ ) {
+            Optional<Equipment> eq = equipmentService.getEquipment(equipments.get(i));
+            if(eq.isPresent()){ newEquipments.add(eq.get());}
+        }
+        System.out.println(newEquipments.get(0).getName());
+
+
+        Location newLocation = new Location();
+        newLocation.setName(location.getName());
+        newLocation.setDescription(location.getDescription());
+        newLocation.setLongitude(location.getLongitude());
+        newLocation.setLatitude(location.getLatitude());
+        newLocation.setEquipments(newEquipments);
+
+        System.out.println("add location");
+        return locationService.saveLocation(newLocation);
     }
 
 

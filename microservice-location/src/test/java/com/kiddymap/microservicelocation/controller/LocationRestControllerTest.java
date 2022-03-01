@@ -41,11 +41,11 @@ public class LocationRestControllerTest {
 
     }
 
-    @Test
+  /*  @Test
     void createLocationTest(){
         Mockito.when(locationServiceMock.saveLocation(location)).thenReturn(location);
         assertEquals(location, locationRestController.createLocation(location));
-    }
+    }*/
 
     @Test
     void getLocationTest(){
