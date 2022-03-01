@@ -47,7 +47,6 @@ public class LocationRestController {
             Optional<Equipment> eq = equipmentService.getEquipment(equipments.get(i));
             if(eq.isPresent()){ newEquipments.add(eq.get());}
         }
-        System.out.println(newEquipments.get(0).getName());
 
 
         Location newLocation = new Location();
@@ -157,15 +156,25 @@ public class LocationRestController {
      * @return
      */
     @PutMapping("/location/update/{id}")
-    public Location updateLocation(@PathVariable("id") final UUID id, @RequestBody Location location) {
+    public Location updateLocation(@PathVariable("id") final UUID id, @RequestBody LocationIncompleteDTO location) {
+
+
         Optional<Location> e = locationService.getLocation(id);
         if (e.isPresent()) {
+            List<UUID> equipments =  location.getEquipments();
+            List<Equipment> newEquipments = new ArrayList<>();
+
+            for( int i=0; i<equipments.size(); i++ ) {
+                Optional<Equipment> eq = equipmentService.getEquipment(equipments.get(i));
+                if(eq.isPresent()){ newEquipments.add(eq.get());}
+            }
+
             Location currentLocation = e.get();
             currentLocation.setLongitude(location.getLongitude());
             currentLocation.setLatitude(location.getLatitude());
             currentLocation.setName(location.getName());
             currentLocation.setDescription(location.getDescription());
-            currentLocation.setEquipments(location.getEquipments());
+            currentLocation.setEquipments(newEquipments);
 
             locationService.saveLocation(currentLocation);
             return currentLocation;
