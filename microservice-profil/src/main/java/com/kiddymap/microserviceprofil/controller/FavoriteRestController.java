@@ -10,6 +10,9 @@ import io.swagger.annotations.Api;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -29,11 +32,22 @@ public class FavoriteRestController {
     @Autowired
     ModelMapper modelMapper;
 
+    public String getAuthId(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Jwt jwt = (Jwt) authentication.getPrincipal();
+        System.out.println("get id : " + jwt.getClaims().get("sub"));
+        return jwt.getClaims().get("sub").toString();
+    }
 
     @PutMapping("/profil/favorite/add/{id}")
     public Profil addProfilFavorite(@PathVariable("id") final UUID locationId, @RequestBody Profil profil) {
         Optional<Location> optionalLocation = locationService.getLocation(locationId);
         Optional<Profil> optionalProfil = profilService.getProfil(profil.getId());
+
+        if(!getAuthId().equals(optionalProfil.get().getAuthId())){
+            System.out.println(" not validate");
+            return null;
+        }
 
         if (optionalProfil.isPresent() && optionalLocation.isPresent()) {
             Profil currentProfil = optionalProfil.get();
@@ -53,15 +67,22 @@ public class FavoriteRestController {
         Optional<Location> optionalLocation = locationService.getLocation(locationId);
         Optional<Profil> optionalProfil = profilService.getProfil(profil.getId());
 
-        if (optionalProfil.isPresent() && optionalLocation.isPresent()) {
-            Profil currentProfil = optionalProfil.get();
-            profilService.deleteProfilFavorite(optionalLocation.get(), optionalProfil.get());
-
-            return currentProfil ;
-
-        } else {
+        if(!getAuthId().equals(optionalProfil.get().getAuthId())){
+            System.out.println(" not validate");
             return null;
         }
+
+
+            if (optionalProfil.isPresent() && optionalLocation.isPresent()) {
+                Profil currentProfil = optionalProfil.get();
+                profilService.deleteProfilFavorite(optionalLocation.get(), optionalProfil.get());
+
+                return currentProfil;
+
+            } else {
+                return null;
+            }
+
 
     }
 
@@ -81,21 +102,29 @@ public class FavoriteRestController {
     }
 
 
-    @GetMapping("/profil/favorite/exist/{profilId}/{locationId}")
-    public boolean existProfilFavorite(@PathVariable("profilId") final UUID profilId, @PathVariable("locationId") final UUID locationId) {
+    @GetMapping("/profil/favorite/exist/{locationId}")
+    public boolean existProfilFavorite(@PathVariable("locationId") final UUID locationId) {
         System.out.println("look if favorite exist");
+        Optional<Profil> optionalProfil = profilService.getProfilByAuthId(getAuthId());
 
-        Optional<Favorite> optionalFavorite = profilService.existFavorite(profilId, locationId);
+        if (optionalProfil.isPresent()) {
 
-        if (optionalFavorite.isPresent()) {
-            System.out.println("favorite");
+            Profil profil = optionalProfil.get();
 
-            return true;
-        } else {
-            System.out.println("not favorite");
+            Optional<Favorite> optionalFavorite = profilService.existFavorite(profil.getId(), locationId);
 
-            return false;
+            if (optionalFavorite.isPresent()) {
+                System.out.println("favorite");
+
+                return true;
+            } else {
+                System.out.println("not favorite");
+
+                return false;
+            }
         }
+        else{
+            return false;}
 
 
     }

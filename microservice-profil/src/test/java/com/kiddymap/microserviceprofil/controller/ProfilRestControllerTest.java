@@ -59,7 +59,7 @@ public class ProfilRestControllerTest {
         assertEquals(profil,profilRestController.createProfil(profil));
     }
 
-    @Test
+  /*  @Test
     void getProfilTest(){
         Mockito.when(profilServiceMock.getProfil(profil.getId())).thenReturn(Optional.of(profil));
         assertEquals(profil,profilRestController.getProfil(profil.getId()));
@@ -69,7 +69,7 @@ public class ProfilRestControllerTest {
     void getProfilTest_returnNull(){
         Mockito.when(profilServiceMock.getProfil(profil.getId())).thenReturn(Optional.empty());
         assertNull(profilRestController.getProfil(profil.getId()));
-    }
+    }*/
 
     @Test
     void updateProfilTest(){

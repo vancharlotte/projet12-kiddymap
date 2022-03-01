@@ -2,7 +2,6 @@ package com.kiddymap.microserviceprofil.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -36,14 +35,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
                 .mvcMatchers("/profil/favorite/**").permitAll()
                 .mvcMatchers("/profil/add").permitAll()
-               .mvcMatchers("/profil/auth/**").permitAll()
-              .mvcMatchers("/profil/get/**").permitAll()
+                .mvcMatchers("/profil/auth/**").permitAll()
+                .mvcMatchers("/profil/get/**").permitAll()
                 .mvcMatchers("/profil/update/**").permitAll()
                 .anyRequest()
                 .authenticated()
                 .and()
                 .cors()
-              //  .configurationSource(corsConfigurationSource())
+                //  .configurationSource(corsConfigurationSource())
                 .and()
                 .oauth2ResourceServer()
                 .jwt()
@@ -65,7 +64,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         OAuth2TokenValidator<Jwt> withAudience = new AudienceValidator(audience);
         OAuth2TokenValidator<Jwt> withIssuer = JwtValidators.createDefaultWithIssuer(issuer);
         OAuth2TokenValidator<Jwt> validator = new DelegatingOAuth2TokenValidator<>(withAudience, withIssuer);
-
 
         jwtDecoder.setJwtValidator(validator);
 

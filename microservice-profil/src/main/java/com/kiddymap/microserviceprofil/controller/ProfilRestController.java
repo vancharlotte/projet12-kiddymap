@@ -4,11 +4,20 @@ import com.kiddymap.microserviceprofil.controller.dto.ProfilDTO;
 import com.kiddymap.microserviceprofil.model.Profil;
 import com.kiddymap.microserviceprofil.service.impl.AuthServiceImpl;
 import com.kiddymap.microserviceprofil.service.impl.ProfilServiceImpl;
+import com.nimbusds.jose.Algorithm;
+import com.nimbusds.jwt.JWT;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.core.OAuth2AccessToken;
+import org.springframework.security.oauth2.core.OAuth2AuthenticatedPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.ContentHandler;
 import java.util.*;
 
 @RestController
@@ -22,6 +31,9 @@ public class ProfilRestController {
 
     @Autowired
     ModelMapper modelMapper;
+
+    @Autowired
+    JwtDecoder jwtDecoder;
 
     /**
      * Create - Add a new profil
@@ -58,23 +70,39 @@ public class ProfilRestController {
      */
     @GetMapping("/profil/get/id/{id}")
     public ProfilDTO getProfil(@PathVariable("id") final UUID id) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Jwt jwt = (Jwt) authentication.getPrincipal();
+        System.out.println("get id : " + jwt.getClaims().get("sub"));
 
         Optional<Profil> profil = profilService.getProfil(id);
-        if(profil.isPresent()) {
-            return modelMapper.map(profil.get(), ProfilDTO.class);
-        } else {
+
+        if (profil.get().getAuthId().equals(jwt.getClaims().get("sub"))) {
+            System.out.println("user verified");
+            if (profil.isPresent()) {
+                return modelMapper.map(profil.get(), ProfilDTO.class);
+            } else {
+                return null;
+            }
+        }
+        else{
             return null;
         }
     }
 
     /**
-     * Read - Get one profil
-     * @param authId The id of the profil
+     * Read - Get one profil bu authId
      * @return A profil object full filled
      */
-    @GetMapping("/profil/get/auth/{authId}")
-    public ProfilDTO getProfilByAuthId(@PathVariable("authId") final String authId) {
-        Optional<Profil> profil = profilService.getProfilByAuthId(authId);
+    @GetMapping("/profil/get/auth")
+    public ProfilDTO getProfilByAuthId() {
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Jwt jwt = (Jwt) authentication.getPrincipal();
+        System.out.println("sub : " + jwt.getClaims().get("sub"));
+
+
+
+        Optional<Profil> profil = profilService.getProfilByAuthId(jwt.getClaims().get("sub").toString());
         if(profil.isPresent()) {
             return modelMapper.map(profil.get(), ProfilDTO.class);
         } else {
@@ -102,7 +130,7 @@ public class ProfilRestController {
      */
     @PutMapping("/profil/update/{id}")
     public Profil updateProfil(@PathVariable("id") final UUID id, @RequestBody Profil profil) {
-        System.out.println("profil" + profil.toString());
+        System.out.println("profil : " + profil.toString());
         Optional<Profil> e = profilService.getProfil(id);
         if (e.isPresent()) {
             Profil currentProfil = e.get();
@@ -111,12 +139,11 @@ public class ProfilRestController {
             currentProfil.setDescription(profil.getDescription());
             currentProfil.setFavoriteLocations(profil.getFavoriteLocations());
 
-            String username = profil.getEmail();
-            if (currentProfil.getEmail() != profil.getEmail()) {
+            if (!currentProfil.getEmail().equals(profil.getEmail())) {
+                System.out.println(currentProfil.getEmail()+profil.getEmail());
                 authService.updateEmail(profil.getAuthId(), profil.getEmail());
                 currentProfil.setEmail(profil.getEmail());
             }
-
                 profilService.saveProfil(currentProfil);
                 return currentProfil;
 
