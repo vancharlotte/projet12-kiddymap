@@ -4,20 +4,15 @@ import com.kiddymap.microserviceprofil.controller.dto.ProfilDTO;
 import com.kiddymap.microserviceprofil.model.Profil;
 import com.kiddymap.microserviceprofil.service.impl.AuthServiceImpl;
 import com.kiddymap.microserviceprofil.service.impl.ProfilServiceImpl;
-import com.nimbusds.jose.Algorithm;
-import com.nimbusds.jwt.JWT;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.oauth2.core.OAuth2AccessToken;
-import org.springframework.security.oauth2.core.OAuth2AuthenticatedPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.web.bind.annotation.*;
 
-import java.net.ContentHandler;
 import java.util.*;
 
 @RestController
@@ -53,6 +48,8 @@ public class ProfilRestController {
             Profil newProfil = new  Profil();
             newProfil.setAuthId(profil.getAuthId());
             newProfil.setUsername(profil.getUsername());
+            newProfil.setEmail(profil.getEmail());
+
             newProfil.setDescription("à compléter");
             System.out.println("save new profil");
             authService.addRoleToUser(profil.getAuthId());
@@ -139,11 +136,13 @@ public class ProfilRestController {
             currentProfil.setDescription(profil.getDescription());
             currentProfil.setFavoriteLocations(profil.getFavoriteLocations());
 
+            String username = profil.getEmail();
             if (!currentProfil.getEmail().equals(profil.getEmail())) {
                 System.out.println(currentProfil.getEmail()+profil.getEmail());
                 authService.updateEmail(profil.getAuthId(), profil.getEmail());
                 currentProfil.setEmail(profil.getEmail());
             }
+
                 profilService.saveProfil(currentProfil);
                 return currentProfil;
 
