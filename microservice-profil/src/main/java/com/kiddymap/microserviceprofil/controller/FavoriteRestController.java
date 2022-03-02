@@ -6,7 +6,6 @@ import com.kiddymap.microserviceprofil.model.Location;
 import com.kiddymap.microserviceprofil.model.Profil;
 import com.kiddymap.microserviceprofil.service.impl.LocationServiceImpl;
 import com.kiddymap.microserviceprofil.service.impl.ProfilServiceImpl;
-import io.swagger.annotations.Api;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;

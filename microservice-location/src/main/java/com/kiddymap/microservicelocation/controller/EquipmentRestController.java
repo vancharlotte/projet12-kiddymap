@@ -53,10 +53,10 @@ public class EquipmentRestController {
     /**
      * Read - Get one equipment
      *
-     * @param id The id of the equipment
+     * @param listOfId The list of id of the equipments
      * @return An equipment object full filled
      */
-    @GetMapping("/location/equipment/list/{listOfId}")
+    @GetMapping("/location/public/equipment/list/{listOfId}")
     public List<EquipmentDTO> getListEquipment(@PathVariable("listOfId") final List<UUID> listOfId) {
         System.out.println("listofId : " + listOfId.get(0));
         List<EquipmentDTO> equipments = new ArrayList();

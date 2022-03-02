@@ -12,6 +12,7 @@ import org.springframework.security.oauth2.core.OAuth2TokenValidator;
 import org.springframework.security.oauth2.jwt.*;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
+import org.springframework.web.bind.annotation.GetMapping;
 
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 @EnableWebSecurity
@@ -29,15 +30,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .mvcMatchers("/location/getAllGeoJson/**").permitAll()
-                .mvcMatchers("/location/exist/**").permitAll()
-                .mvcMatchers("/location/update/**").permitAll()
 
-                .mvcMatchers("/location/add/**").permitAll()
-                .mvcMatchers("/location/get/**").permitAll()
+                .mvcMatchers("/location/public/getAllGeoJson/**").permitAll()
+                .mvcMatchers("/location/public/get/**").permitAll()
 
-                .mvcMatchers("/location/equipment/**").permitAll()
+                .mvcMatchers("/location/protected/exist/**").permitAll()
+                .mvcMatchers("/location/protected/update/**").permitAll()
+                .mvcMatchers("/location/protected/add/**").permitAll()
 
+                .mvcMatchers("/equipment/**").permitAll()
+
+                .mvcMatchers("/location//equipment/**").permitAll()
 
 //                .mvcMatchers("/location/get/**").hasAuthority("access:data")
                 .anyRequest()

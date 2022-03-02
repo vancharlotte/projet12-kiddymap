@@ -13,6 +13,9 @@ import org.apache.commons.lang.ObjectUtils;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
@@ -37,7 +40,7 @@ public class LocationRestController {
      * @param location An object location
      * @return The location object saved
      */
-    @PostMapping("/location/add")
+    @PostMapping("/location/protected/add")
     public Location createLocation(@RequestBody LocationIncompleteDTO location) {
 
         List<UUID> equipments =  location.getEquipments();
@@ -67,7 +70,7 @@ public class LocationRestController {
      * @param id The id of the location
      * @return A location object full filled
      */
-    @GetMapping("/location/get/{id}")
+    @GetMapping("/location/public/get/{id}")
     public LocationDTO getLocation(@PathVariable("id") final UUID id) {
         Optional<Location> location = locationService.getLocation(id);
         if (location.isPresent()) {
@@ -86,7 +89,7 @@ public class LocationRestController {
      * @param latitude the lat of the location, long the long of the location
      * @return A location object full filled
      */
-    @GetMapping("/location/exist/{lat}/{long}")
+    @GetMapping("/location/protected/exist/{lat}/{long}")
     public boolean existLocation(@PathVariable("lat") float latitude, @PathVariable("long") float longitude) {
         return locationService.existLocation(latitude, longitude);
 
@@ -97,14 +100,14 @@ public class LocationRestController {
      *
      * @return - An Iterable object of location full filled
      */
-    @GetMapping("/location/getAll")
+    @GetMapping("/location/public/getAll")
     public Iterable<LocationDTO> getAllLocations() {
         Iterable<Location> locationList = locationService.getAllLocations();
         return modelMapper.map(locationList, new TypeToken<List<LocationDTO>>() {
         }.getType());
     }
 
-    @GetMapping("/location/getAllGeoJson/{minLat}/{maxLat}/{minLong}/{maxLong}")
+    @GetMapping("/location/public/getAllGeoJson/{minLat}/{maxLat}/{minLong}/{maxLong}")
     public JSONObject getLocationsGeoJsonInBetween(@PathVariable("minLat") float minLat, @PathVariable("maxLat") float maxLat, @PathVariable("minLong") float minLong, @PathVariable("maxLong") float maxLong) {
         JSONObject featureCollection = new JSONObject();
         System.out.println("minLat : " + minLat + ", maxLat : " + maxLat);
@@ -155,7 +158,7 @@ public class LocationRestController {
      * @param location - The location object updated
      * @return
      */
-    @PutMapping("/location/update/{id}")
+    @PutMapping("/location/protected/update/{id}")
     public Location updateLocation(@PathVariable("id") final UUID id, @RequestBody LocationIncompleteDTO location) {
 
 
@@ -189,7 +192,7 @@ public class LocationRestController {
      *
      * @param id - The id of the location to delete
      */
-    @DeleteMapping("/location/delete/{id}")
+    @DeleteMapping("/location/protected/delete/{id}")
     public void deleteLocation(@PathVariable("id") final UUID id) {
         locationService.deleteLocation(id);
     }
