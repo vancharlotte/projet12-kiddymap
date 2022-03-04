@@ -3,25 +3,31 @@ package com.kiddymap.microservicelocation.controller;
 import com.kiddymap.microservicelocation.controller.dto.EquipmentDTO;
 import com.kiddymap.microservicelocation.controller.dto.LocationDTO;
 import com.kiddymap.microservicelocation.controller.dto.LocationIncompleteDTO;
+import com.kiddymap.microservicelocation.exception.EquipmentNotFoundException;
+import com.kiddymap.microservicelocation.exception.LocationNotFoundException;
 import com.kiddymap.microservicelocation.model.Equipment;
 import com.kiddymap.microservicelocation.model.Location;
 import com.kiddymap.microservicelocation.service.impl.EquipmentServiceImpl;
 import com.kiddymap.microservicelocation.service.impl.LocationServiceImpl;
 import com.nimbusds.jose.shaded.json.JSONArray;
 import com.nimbusds.jose.shaded.json.JSONObject;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.ObjectUtils;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.*;
 
 
 @RestController
+@Slf4j
 public class LocationRestController {
 
     @Autowired
@@ -43,12 +49,17 @@ public class LocationRestController {
     @PostMapping("/location/protected/add")
     public Location createLocation(@RequestBody LocationIncompleteDTO location) {
 
-        List<UUID> equipments =  location.getEquipments();
+        List<UUID> equipments = location.getEquipments();
         List<Equipment> newEquipments = new ArrayList<>();
 
-        for( int i=0; i<equipments.size(); i++ ) {
+        for (int i = 0; i < equipments.size(); i++) {
             Optional<Equipment> eq = equipmentService.getEquipment(equipments.get(i));
-            if(eq.isPresent()){ newEquipments.add(eq.get());}
+            if (eq.isPresent()) {
+                newEquipments.add(eq.get());
+            } else {
+                throw new ResponseStatusException(
+                        HttpStatus.NOT_FOUND, "equipment not Found", new EquipmentNotFoundException("equipment not found"));
+            }
         }
 
 
@@ -59,7 +70,8 @@ public class LocationRestController {
         newLocation.setLatitude(location.getLatitude());
         newLocation.setEquipments(newEquipments);
 
-        System.out.println("add location");
+        log.info("add new location to the bdd : " + newLocation.getName());
+
         return locationService.saveLocation(newLocation);
     }
 
@@ -77,10 +89,11 @@ public class LocationRestController {
             System.out.println("id");
             return modelMapper.map(location.get(), LocationDTO.class);
         } else {
-            System.out.println("null");
-
-            return null;
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "location not Found", new LocationNotFoundException("location not found"));
         }
+
+
     }
 
     /**
@@ -100,55 +113,54 @@ public class LocationRestController {
      *
      * @return - An Iterable object of location full filled
      */
-    @GetMapping("/location/public/getAll")
+   /* @GetMapping("/location/public/getAll")
     public Iterable<LocationDTO> getAllLocations() {
         Iterable<Location> locationList = locationService.getAllLocations();
         return modelMapper.map(locationList, new TypeToken<List<LocationDTO>>() {
         }.getType());
-    }
+    }*/
 
     @GetMapping("/location/public/getAllGeoJson/{minLat}/{maxLat}/{minLong}/{maxLong}")
     public JSONObject getLocationsGeoJsonInBetween(@PathVariable("minLat") float minLat, @PathVariable("maxLat") float maxLat, @PathVariable("minLong") float minLong, @PathVariable("maxLong") float maxLong) {
         JSONObject featureCollection = new JSONObject();
-        System.out.println("minLat : " + minLat + ", maxLat : " + maxLat);
         featureCollection.put("type", "featureCollection");
-
         JSONArray featureList = new JSONArray();
 
-        // for (Location obj : locationService.getAllLocations()) {
-        for (Location obj : locationService.getAllLocationsInBetween(minLat, maxLat, minLong, maxLong)) {
+       try {
+           for (Location obj : locationService.getAllLocationsInBetween(minLat, maxLat, minLong, maxLong)) {
 
-            JSONObject feature = new JSONObject();
+               JSONObject feature = new JSONObject();
 
-            JSONObject point = new JSONObject();
+               JSONObject point = new JSONObject();
 
-            List<Float> coordinates = new ArrayList<>();
-            coordinates.add(obj.getLongitude());
-            coordinates.add(obj.getLatitude());
+               List<Float> coordinates = new ArrayList<>();
+               coordinates.add(obj.getLongitude());
+               coordinates.add(obj.getLatitude());
 
-            point.put("type", "Point");
-            point.put("coordinates", coordinates);
+               point.put("type", "Point");
+               point.put("coordinates", coordinates);
 
-            JSONObject properties = new JSONObject();
-            properties.put("id", obj.getId());
-            properties.put("name", obj.getName());
-            properties.put("description", obj.getDescription());
+               JSONObject properties = new JSONObject();
+               properties.put("id", obj.getId());
+               properties.put("name", obj.getName());
+               properties.put("description", obj.getDescription());
 
-         //   properties.put("equipment", obj.getEquipments());
+               feature.put("geometry", point);
+               feature.put("type", "Feature");
+               feature.put("properties", properties);
 
-            feature.put("geometry", point);
-            feature.put("type", "Feature");
-            feature.put("properties", properties);
-
-            featureList.add(feature);
+               featureList.add(feature);
 
 
-        }
+           }
 
-        featureCollection.put("features", featureList);
-       // System.out.println(featureCollection.toString());
+           featureCollection.put("features", featureList);
 
-        return featureCollection;
+           return featureCollection;
+       }
+       catch (Exception e){
+           throw e;
+       }
     }
 
     /**
@@ -160,16 +172,22 @@ public class LocationRestController {
      */
     @PutMapping("/location/protected/update/{id}")
     public Location updateLocation(@PathVariable("id") final UUID id, @RequestBody LocationIncompleteDTO location) {
-
-
         Optional<Location> e = locationService.getLocation(id);
+
         if (e.isPresent()) {
-            List<UUID> equipments =  location.getEquipments();
+            List<UUID> equipments = location.getEquipments();
             List<Equipment> newEquipments = new ArrayList<>();
 
-            for( int i=0; i<equipments.size(); i++ ) {
+            for (int i = 0; i < equipments.size(); i++) {
                 Optional<Equipment> eq = equipmentService.getEquipment(equipments.get(i));
-                if(eq.isPresent()){ newEquipments.add(eq.get());}
+                if (eq.isPresent()) {
+                    newEquipments.add(eq.get());
+                }
+                else {
+                    throw new ResponseStatusException(
+                            HttpStatus.NOT_FOUND, "equipment not Found", new EquipmentNotFoundException("equipment not found"));
+
+                }
             }
 
             Location currentLocation = e.get();
@@ -183,7 +201,8 @@ public class LocationRestController {
             return currentLocation;
 
         } else {
-            return null;
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "location not Found", new LocationNotFoundException("location not found"));
         }
     }
 
@@ -194,7 +213,14 @@ public class LocationRestController {
      */
     @DeleteMapping("/location/protected/delete/{id}")
     public void deleteLocation(@PathVariable("id") final UUID id) {
-        locationService.deleteLocation(id);
+        Optional<Location> e = locationService.getLocation(id);
+        if (e.isPresent()) {
+            locationService.deleteLocation(id);
+        }
+        else{
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "location not Found", new LocationNotFoundException("location not found"));
+        }
     }
 
 }

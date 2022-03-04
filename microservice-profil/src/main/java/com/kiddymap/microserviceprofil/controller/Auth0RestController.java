@@ -19,7 +19,7 @@ public class Auth0RestController {
     @Autowired
     RestTemplate restTemplate;
 
-    @GetMapping("/profil/auth/add/signup")
+  /*  @GetMapping("/profil/protected/auth/add/signup")
     public ResponseEntity<String> accessAuth(@RequestBody JSONObject ob) {
         try {
             ob.put("client_id", "4xx8AmoU9nEEbWWWOQJpli8IRxuzr0p4");
@@ -38,10 +38,10 @@ public class Auth0RestController {
         } catch (Exception e) {
             throw e;
         }
-    }
+    }*/
 
 
-    @GetMapping("/profil/auth/get/allUsers")
+   /* @GetMapping("/profil/protected/auth/get/allUsers")
     public ResponseEntity<String> getAllAuth() {
         try {
             ResponseEntity<JSONObject> ob = authService.getTokenAuth();
@@ -64,7 +64,7 @@ public class Auth0RestController {
 
     }
 
-
+*/
 }
 
 

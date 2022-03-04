@@ -30,19 +30,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
+                .mvcMatchers("/location/public/**").permitAll()
+                .mvcMatchers("/location/protected/delete/**").hasAuthority("delete:location")
+                .mvcMatchers("/location/protected/exist/**").hasAuthority("update:location")
+                .mvcMatchers("/location/protected/update/**").hasAuthority("update:location")
+                .mvcMatchers("/location/protected/add/**").hasAuthority("create:location")
+                .mvcMatchers("/equipment/protected/**").hasAuthority("update:equipment")
+                .mvcMatchers("/equipment/public/**").hasAuthority("access:equipment")
 
-                .mvcMatchers("/location/public/getAllGeoJson/**").permitAll()
-                .mvcMatchers("/location/public/get/**").permitAll()
-
-                .mvcMatchers("/location/protected/exist/**").permitAll()
-                .mvcMatchers("/location/protected/update/**").permitAll()
-                .mvcMatchers("/location/protected/add/**").permitAll()
-
-                .mvcMatchers("/equipment/**").permitAll()
-
-                .mvcMatchers("/location//equipment/**").permitAll()
-
-//                .mvcMatchers("/location/get/**").hasAuthority("access:data")
                 .anyRequest()
                 .authenticated()
                 .and()

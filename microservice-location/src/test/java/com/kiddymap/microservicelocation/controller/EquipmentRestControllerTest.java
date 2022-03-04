@@ -83,13 +83,6 @@ public class EquipmentRestControllerTest {
 
 
 
-    @Test
-    void deleteEquipmentTest(){
-        equipmentRestController.deleteEquipment(equipment.getId());
-        Mockito.verify(equipmentServiceMock).deleteEquipment(equipment.getId());
-    }
-
-
 
 
 }

@@ -30,11 +30,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .mvcMatchers("/profil/favorite/**").permitAll()
-                .mvcMatchers("/profil/add").permitAll()
-                .mvcMatchers("/profil/auth/**").permitAll()
-                .mvcMatchers("/profil/get/**").permitAll()
-                .mvcMatchers("/profil/update/**").permitAll()
+                .mvcMatchers("/profil/protected/**").hasRole("admin")
+                .mvcMatchers("/profil/add").hasAuthority("create:user")
+                .mvcMatchers("/profil/get/**").hasAuthority("access:user")
+                .mvcMatchers("/profil/update/**").hasAuthority("update:user")
+                .mvcMatchers("/profil/favorite/**").hasAuthority("update:user")
                 .anyRequest()
                 .authenticated()
                 .and()

@@ -1,12 +1,15 @@
 package com.kiddymap.microservicelocation.controller;
 
 import com.kiddymap.microservicelocation.controller.dto.EquipmentDTO;
+import com.kiddymap.microservicelocation.exception.EquipmentNotFoundException;
 import com.kiddymap.microservicelocation.model.Equipment;
 import com.kiddymap.microservicelocation.service.impl.EquipmentServiceImpl;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +31,7 @@ public class EquipmentRestController {
      * @param equipment An object equipment
      * @return The equipment object saved
      */
-    @PostMapping("/equipment")
+    @PostMapping("/equipment/protected/add")
     public Equipment createEquipment(@RequestBody Equipment equipment) {
         return equipmentService.saveEquipment(equipment);
     }
@@ -40,13 +43,14 @@ public class EquipmentRestController {
      * @param id The id of the equipment
      * @return An equipment object full filled
      */
-    @GetMapping("/equipment/{id}")
+    @GetMapping("/equipment/public/get/{id}")
     public EquipmentDTO getEquipment(@PathVariable("id") final UUID id) {
         Optional<Equipment> equipment = equipmentService.getEquipment(id);
         if (equipment.isPresent()) {
             return modelMapper.map(equipment.get(), EquipmentDTO.class);
         } else {
-            return null;
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "equipment not Found", new EquipmentNotFoundException("equipment not found"));
         }
     }
 
@@ -56,9 +60,8 @@ public class EquipmentRestController {
      * @param listOfId The list of id of the equipments
      * @return An equipment object full filled
      */
-    @GetMapping("/location/public/equipment/list/{listOfId}")
+  /*  @GetMapping("/location/public/equipment/list/{listOfId}")
     public List<EquipmentDTO> getListEquipment(@PathVariable("listOfId") final List<UUID> listOfId) {
-        System.out.println("listofId : " + listOfId.get(0));
         List<EquipmentDTO> equipments = new ArrayList();
 
         for (int i = 0; i < listOfId.size(); i++) {
@@ -68,12 +71,15 @@ public class EquipmentRestController {
                 EquipmentDTO equipmentDTO = modelMapper.map(equipment.get(), EquipmentDTO.class);
                 equipments.add(equipmentDTO);
             }
+            else{
+                throw new ResponseStatusException(
+                        HttpStatus.NOT_FOUND, "equipment not Found", new EquipmentNotFoundException("equipment not found"));
+            }
 
         }
-         System.out.println("list : " + equipments);
         return equipments;
 
-    }
+    }*/
 
 
     /**
@@ -81,7 +87,7 @@ public class EquipmentRestController {
      *
      * @return - An Iterable object of equipment full filled
      */
-    @GetMapping("/equipments")
+    @GetMapping("/equipments/public/getAll")
     public Iterable<EquipmentDTO> getAllEquipments() {
         Iterable<Equipment> equipmentList = equipmentService.getAllEquipments();
         return modelMapper.map(equipmentList, new TypeToken<List<EquipmentDTO>>() {
@@ -96,7 +102,7 @@ public class EquipmentRestController {
      * @param equipment - The equipment object updated
      * @return
      */
-    @PutMapping("/equipment/{id}")
+    @PutMapping("/equipment/protected/update/{id}")
     public Equipment updateEquipment(@PathVariable("id") final UUID id, @RequestBody Equipment equipment) {
         Optional<Equipment> e = equipmentService.getEquipment(id);
         if (e.isPresent()) {
@@ -111,19 +117,12 @@ public class EquipmentRestController {
             return currentEquipment;
 
         } else {
-            return null;
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "equipment not Found", new EquipmentNotFoundException("equipment not found"));
         }
     }
 
-    /**
-     * Delete - Delete a equipment
-     *
-     * @param id - The id of the equipment to delete
-     */
-    @DeleteMapping("/equipment/{id}")
-    public void deleteEquipment(@PathVariable("id") final UUID id) {
-        equipmentService.deleteEquipment(id);
-    }
+
 
 
 }

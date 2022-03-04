@@ -59,12 +59,6 @@ public class LocationRestControllerTest {
         assertNull(locationRestController.getLocation(location.getId()));
     }
 
-    @Test
-    void getAllLocationsTest(){
-        Mockito.when(locationServiceMock.getAllLocations()).thenReturn(locations);
-        assertEquals(locations,locationRestController.getAllLocations());
-
-    }
 
  /*   @Test
     void updateLocationTest(){

@@ -46,9 +46,8 @@ public class ProfilRestController {
      */
     @PostMapping("/profil/add")
     public Profil createProfil(@RequestBody Profil profil) {
-        System.out.println("profil ?");
-
         Optional<Profil> thisProfil = profilService.getProfilByAuthId(profil.getAuthId());
+
         if (thisProfil.isPresent()) {
             log.info("createProfil : profil not added to bdd:  already exist");
             return thisProfil.get();
@@ -76,10 +75,8 @@ public class ProfilRestController {
      */
     @GetMapping("/profil/get/id/{id}")
     public ProfilDTO getProfil(@PathVariable("id") final UUID id) {
-
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Jwt jwt = (Jwt) authentication.getPrincipal();
-        System.out.println("get id : " + jwt.getClaims().get("sub"));
 
         Optional<Profil> profil = profilService.getProfil(id);
 
@@ -140,7 +137,6 @@ public class ProfilRestController {
     public Profil updateProfil(@PathVariable("id") final UUID id, @RequestBody Profil profil) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Jwt jwt = (Jwt) authentication.getPrincipal();
-        System.out.println("get id : " + jwt.getClaims().get("sub"));
 
         if (profil.getAuthId().equals(jwt.getClaims().get("sub"))) {
 

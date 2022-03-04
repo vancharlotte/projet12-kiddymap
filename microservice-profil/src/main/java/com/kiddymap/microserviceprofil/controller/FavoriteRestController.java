@@ -100,7 +100,7 @@ public class FavoriteRestController {
     }
 
 
-    @GetMapping("/profil/allfavorites/{id}")
+    @GetMapping("/profil/favorite/allfavorites/{id}")
     public List<LocationDTO> getProfilAllFavorite(@PathVariable("id") final UUID profilId, @RequestBody Profil profil) {
         Optional<Profil> optionalProfil = profilService.getProfil(profilId);
 

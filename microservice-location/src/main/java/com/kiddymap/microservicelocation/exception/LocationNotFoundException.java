@@ -1,4 +1,4 @@
-package com.kiddymap.microserviceprofil.exception;
+package com.kiddymap.microservicelocation.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
