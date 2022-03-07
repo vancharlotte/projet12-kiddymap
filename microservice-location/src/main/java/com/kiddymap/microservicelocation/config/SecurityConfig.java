@@ -2,7 +2,6 @@ package com.kiddymap.microservicelocation.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -34,10 +33,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .mvcMatchers("/location/protected/delete/**").hasAuthority("delete:location")
                 .mvcMatchers("/location/protected/exist/**").hasAuthority("update:location")
                 .mvcMatchers("/location/protected/update/**").hasAuthority("update:location")
-                .mvcMatchers("/location/protected/add/**").hasAuthority("create:location")
+                .mvcMatchers("/location/protected/add").hasAuthority("create:location")
                 .mvcMatchers("/equipment/protected/**").hasAuthority("update:equipment")
                 .mvcMatchers("/equipment/public/**").hasAuthority("access:equipment")
-
                 .anyRequest()
                 .authenticated()
                 .and()

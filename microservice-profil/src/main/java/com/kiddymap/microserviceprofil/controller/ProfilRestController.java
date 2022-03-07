@@ -148,7 +148,6 @@ public class ProfilRestController {
                 currentProfil.setAuthId(profil.getAuthId());
                 currentProfil.setUsername(profil.getUsername());
                 currentProfil.setDescription(profil.getDescription());
-                currentProfil.setFavoriteLocations(profil.getFavoriteLocations());
 
                 String username = profil.getEmail();
                 if (!currentProfil.getEmail().equals(profil.getEmail())) {

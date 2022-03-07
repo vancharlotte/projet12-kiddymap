@@ -48,7 +48,7 @@ public class LocationRestController {
      */
     @PostMapping("/location/protected/add")
     public Location createLocation(@RequestBody LocationIncompleteDTO location) {
-
+        log.info(location.toString());
         List<UUID> equipments = location.getEquipments();
         List<Equipment> newEquipments = new ArrayList<>();
 
