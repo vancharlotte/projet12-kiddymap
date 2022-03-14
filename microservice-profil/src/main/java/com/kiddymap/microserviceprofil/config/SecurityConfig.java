@@ -32,7 +32,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
                 .mvcMatchers("/profil/protected/**").hasRole("admin")
                 .mvcMatchers("/profil/add").permitAll()
-                .mvcMatchers("/profil/get/**").hasAuthority("access:user")
+                .mvcMatchers("/profil/get/**").authenticated()
                 .mvcMatchers("/profil/update/**").hasAuthority("update:user")
                 .mvcMatchers("/profil/favorite/**").hasAuthority("update:user")
                 .anyRequest()
@@ -88,7 +88,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         converter.setAuthorityPrefix("");
         JwtAuthenticationConverter jwtConverter = new JwtAuthenticationConverter();
         jwtConverter.setJwtGrantedAuthoritiesConverter(converter);
-        System.out.println(converter.toString());
         return jwtConverter;
     }
 

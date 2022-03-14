@@ -37,7 +37,7 @@ public class Profil implements Serializable {
             name = "profil_location_favorite",
             joinColumns ={ @JoinColumn(name = "profil_id")},
             inverseJoinColumns = {@JoinColumn(name = "location_id")})
-    List<Location> favoriteLocations;
+    private List<Location> favoriteLocations;
 
 
 

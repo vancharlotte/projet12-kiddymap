@@ -29,11 +29,8 @@ public class AuthServiceImpl {
             headers.setContentType(MediaType.APPLICATION_JSON);
 
             HttpEntity<JSONObject> httpEntity = new HttpEntity<>(ob, headers);
-            RestTemplate restTemplate = new RestTemplate();
-            ResponseEntity<JSONObject> response = restTemplate.exchange(url, HttpMethod.POST, httpEntity, JSONObject.class);
+           return restTemplate.exchange(url, HttpMethod.POST, httpEntity, JSONObject.class);
 
-            log.info(response.getBody().toString());
-            return response;
         } catch (Exception e) {
             throw e;
         }
@@ -44,7 +41,6 @@ public class AuthServiceImpl {
             ResponseEntity<JSONObject> token = getTokenAuth();
             String url = "https://dev-kiddymap.eu.auth0.com/api/v2/users/" + authId;
 
-            System.out.println(email);
             String body = "{\n" +
                     "  \"email\": \"" + email + " \"\n" +
                     "}";
@@ -54,9 +50,8 @@ public class AuthServiceImpl {
             headers.setBearerAuth(token.getBody().get("access_token").toString());
             HttpEntity<String> httpEntity = new HttpEntity<>(body, headers);
 
-            ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.PATCH, httpEntity, String.class);
-            log.info(response.getBody());
-            return response;
+            return restTemplate.exchange(url, HttpMethod.PATCH, httpEntity, String.class);
+
         } catch (Exception e) {
             throw e;
         }
@@ -78,12 +73,10 @@ public class AuthServiceImpl {
             headers.setBearerAuth(token.getBody().get("access_token").toString());
 
             HttpEntity<String> httpEntity = new HttpEntity<>(role, headers);
-            ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.POST, httpEntity, String.class);
-            log.info(response.getBody());
-            return response;
+            return restTemplate.exchange(url, HttpMethod.POST, httpEntity, String.class);
 
-        } catch (Exception e) {
-            throw e;
+        } catch (NullPointerException e) {
+            return  null;
         }
     }
 

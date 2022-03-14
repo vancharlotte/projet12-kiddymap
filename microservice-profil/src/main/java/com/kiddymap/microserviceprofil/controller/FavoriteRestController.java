@@ -41,7 +41,7 @@ public class FavoriteRestController {
         try {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             Jwt jwt = (Jwt) authentication.getPrincipal();
-            System.out.println("get id : " + jwt.getClaims().get("sub"));
+
             return jwt.getClaims().get("sub").toString();
         } catch (Exception e) {
             throw e;
@@ -53,23 +53,25 @@ public class FavoriteRestController {
         Optional<Location> optionalLocation = locationService.getLocation(locationId);
         Optional<Profil> optionalProfil = profilService.getProfil(profil.getId());
 
-        if (!getAuthId().equals(optionalProfil.get().getAuthId())) {
-            log.error("user not authorized : principal and authId different");
-            throw new ResponseStatusException(
-                    HttpStatus.UNAUTHORIZED, "user not verified", new UserNotVerifiedException("principal and authId different"));
-        } else {
 
-            if (optionalProfil.isPresent() && optionalLocation.isPresent()) {
+        if (optionalProfil.isPresent() && optionalLocation.isPresent()) {
+
+            if (!getAuthId().equals(optionalProfil.get().getAuthId())) {
+                log.error("user not authorized : principal and authId different");
+                throw new ResponseStatusException(
+                        HttpStatus.UNAUTHORIZED, "user not verified", new UserNotVerifiedException("principal and authId different"));
+            } else {
                 Profil currentProfil = optionalProfil.get();
                 profilService.updateProfilFavorite(optionalLocation.get(), optionalProfil.get());
 
                 return currentProfil;
-
-            } else {
-                throw new ResponseStatusException(
-                        HttpStatus.NOT_FOUND, "user not Found", new UserNotFoundException("user not found"));
             }
+
+        } else {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "user not Found", new UserNotFoundException("user not found"));
         }
+
     }
 
 
@@ -78,24 +80,24 @@ public class FavoriteRestController {
         Optional<Location> optionalLocation = locationService.getLocation(locationId);
         Optional<Profil> optionalProfil = profilService.getProfil(profil.getId());
 
-        if (!getAuthId().equals(optionalProfil.get().getAuthId())) {
-            log.error("user not authorized : principal and authId different");
-            throw new ResponseStatusException(
-                    HttpStatus.UNAUTHORIZED, "user not verified", new UserNotVerifiedException("principal and authId different"));
-        } else {
 
-            if (optionalProfil.isPresent() && optionalLocation.isPresent()) {
+        if (optionalProfil.isPresent() && optionalLocation.isPresent()) {
+
+            if (!getAuthId().equals(optionalProfil.get().getAuthId())) {
+                log.error("user not authorized : principal and authId different");
+                throw new ResponseStatusException(
+                        HttpStatus.UNAUTHORIZED, "user not verified", new UserNotVerifiedException("principal and authId different"));
+            } else {
                 Profil currentProfil = optionalProfil.get();
                 profilService.deleteProfilFavorite(optionalLocation.get(), optionalProfil.get());
 
                 return currentProfil;
-
-            } else {
-                throw new ResponseStatusException(
-                        HttpStatus.NOT_FOUND, "user not Found", new UserNotFoundException("user not found"));
             }
-        }
 
+        } else {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "user not Found", new UserNotFoundException("user not found"));
+        }
 
     }
 

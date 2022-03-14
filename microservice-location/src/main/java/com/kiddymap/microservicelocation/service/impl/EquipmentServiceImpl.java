@@ -1,7 +1,6 @@
 package com.kiddymap.microservicelocation.service.impl;
 
 import com.kiddymap.microservicelocation.dao.EquipmentDao;
-import com.kiddymap.microservicelocation.dao.LocationDao;
 import com.kiddymap.microservicelocation.model.Equipment;
 import com.kiddymap.microservicelocation.service.contrat.EquipmentService;
 import org.springframework.beans.factory.annotation.Autowired;

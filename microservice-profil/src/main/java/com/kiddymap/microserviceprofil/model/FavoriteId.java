@@ -1,7 +1,5 @@
 package com.kiddymap.microserviceprofil.model;
 
-import lombok.Data;
-
 import java.io.Serializable;
 import java.util.Objects;
 import java.util.UUID;

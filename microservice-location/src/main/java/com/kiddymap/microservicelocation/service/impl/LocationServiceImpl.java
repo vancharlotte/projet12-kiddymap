@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -46,7 +45,6 @@ public class LocationServiceImpl implements LocationService {
     @Override
     public boolean existLocation(float latitude, float longitude) {
         boolean exist = locationDao.existsByLatitudeAndLongitude(latitude,longitude);
-        System.out.println("location exists ?");
         return exist;
     }
 

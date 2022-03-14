@@ -1,6 +1,5 @@
 package com.kiddymap.microservicelocation.controller.dto;
 
-import com.kiddymap.microservicelocation.model.Equipment;
 import lombok.Data;
 
 import java.util.List;

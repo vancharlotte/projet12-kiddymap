@@ -26,7 +26,7 @@ public class Location implements Serializable {
     private String description;
 
     @ManyToMany
-    List<Profil> profil;
+    private List<Profil> profil;
 
 
 

@@ -1,6 +1,5 @@
 package com.kiddymap.microservicelocation.controller;
 
-import com.kiddymap.microservicelocation.controller.dto.EquipmentDTO;
 import com.kiddymap.microservicelocation.controller.dto.LocationDTO;
 import com.kiddymap.microservicelocation.controller.dto.LocationIncompleteDTO;
 import com.kiddymap.microservicelocation.exception.EquipmentNotFoundException;
@@ -12,14 +11,9 @@ import com.kiddymap.microservicelocation.service.impl.LocationServiceImpl;
 import com.nimbusds.jose.shaded.json.JSONArray;
 import com.nimbusds.jose.shaded.json.JSONObject;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang.ObjectUtils;
 import org.modelmapper.ModelMapper;
-import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -86,7 +80,7 @@ public class LocationRestController {
     public LocationDTO getLocation(@PathVariable("id") final UUID id) {
         Optional<Location> location = locationService.getLocation(id);
         if (location.isPresent()) {
-            System.out.println("id");
+
             return modelMapper.map(location.get(), LocationDTO.class);
         } else {
             throw new ResponseStatusException(

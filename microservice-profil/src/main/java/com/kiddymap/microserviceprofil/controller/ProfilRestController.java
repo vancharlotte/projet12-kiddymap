@@ -58,10 +58,10 @@ public class ProfilRestController {
             newProfil.setEmail(profil.getEmail());
 
             newProfil.setDescription("à compléter");
-            System.out.println("save new profil");
+
             authService.addRoleToUser(profil.getAuthId());
 
-            log.info("creteProfil : new profil added to bdd");
+            log.info("createProfil : new profil added to bdd");
             return profilService.saveProfil(newProfil);
         }
     }
@@ -80,18 +80,20 @@ public class ProfilRestController {
 
         Optional<Profil> profil = profilService.getProfil(id);
 
-        if (profil.get().getAuthId().equals(jwt.getClaims().get("sub"))) {
-            System.out.println("user verified");
-            if (profil.isPresent()) {
-                return modelMapper.map(profil.get(), ProfilDTO.class);
+        if (profil.isPresent()) {
+            if (profil.get().getAuthId().equals(jwt.getClaims().get("sub"))) {
+            return modelMapper.map(profil.get(), ProfilDTO.class);
             } else {
+                throw new ResponseStatusException(
+                        HttpStatus.UNAUTHORIZED, "user not verified", new UserNotVerifiedException("principal and authId different"));
+            }
+        }
+
+            else {
                 throw new ResponseStatusException(
                         HttpStatus.NOT_FOUND, "user not Found", new UserNotFoundException("user not found"));
             }
-        } else {
-            throw new ResponseStatusException(
-                    HttpStatus.UNAUTHORIZED, "user not verified", new UserNotVerifiedException("principal and authId different"));
-        }
+
     }
 
     /**
@@ -103,7 +105,6 @@ public class ProfilRestController {
     public ProfilDTO getProfilByAuthId() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Jwt jwt = (Jwt) authentication.getPrincipal();
-        System.out.println("sub : " + jwt.getClaims().get("sub"));
 
         Optional<Profil> profil = profilService.getProfilByAuthId(jwt.getClaims().get("sub").toString());
         if (profil.isPresent()) {
@@ -140,7 +141,6 @@ public class ProfilRestController {
 
         if (profil.getAuthId().equals(jwt.getClaims().get("sub"))) {
 
-            System.out.println("profil : " + profil.toString());
             Optional<Profil> e = profilService.getProfil(id);
 
             if (e.isPresent()) {
@@ -149,9 +149,8 @@ public class ProfilRestController {
                 currentProfil.setUsername(profil.getUsername());
                 currentProfil.setDescription(profil.getDescription());
 
-                String username = profil.getEmail();
                 if (!currentProfil.getEmail().equals(profil.getEmail())) {
-                    System.out.println(currentProfil.getEmail() + profil.getEmail());
+                log.info("email updated");
                     authService.updateEmail(profil.getAuthId(), profil.getEmail());
                     currentProfil.setEmail(profil.getEmail());
                 }
