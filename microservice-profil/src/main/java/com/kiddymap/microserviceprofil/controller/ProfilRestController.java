@@ -45,7 +45,7 @@ public class ProfilRestController {
      * @return The profil object saved
      */
     @PostMapping("/profil/add")
-    public Profil createProfil(@RequestBody Profil profil) {
+    public Profil createProfil(@RequestBody ProfilDTO profil) {
         Optional<Profil> thisProfil = profilService.getProfilByAuthId(profil.getAuthId());
 
         if (thisProfil.isPresent()) {
@@ -135,7 +135,7 @@ public class ProfilRestController {
      * @return
      */
     @PutMapping("/profil/update/{id}")
-    public Profil updateProfil(@PathVariable("id") final UUID id, @RequestBody Profil profil) {
+    public Profil updateProfil(@PathVariable("id") final UUID id, @RequestBody ProfilDTO profil) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Jwt jwt = (Jwt) authentication.getPrincipal();
 

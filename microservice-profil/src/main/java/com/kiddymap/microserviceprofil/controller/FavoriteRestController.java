@@ -1,6 +1,7 @@
 package com.kiddymap.microserviceprofil.controller;
 
 import com.kiddymap.microserviceprofil.controller.dto.LocationDTO;
+import com.kiddymap.microserviceprofil.controller.dto.ProfilDTO;
 import com.kiddymap.microserviceprofil.exception.UserNotFoundException;
 import com.kiddymap.microserviceprofil.exception.UserNotVerifiedException;
 import com.kiddymap.microserviceprofil.model.Favorite;
@@ -43,13 +44,14 @@ public class FavoriteRestController {
             Jwt jwt = (Jwt) authentication.getPrincipal();
 
             return jwt.getClaims().get("sub").toString();
-        } catch (Exception e) {
-            throw e;
+        } catch (NullPointerException e) {
+            log.error("no authentication possible");
+            return null;
         }
     }
 
     @PutMapping("/profil/favorite/add/{id}")
-    public Profil addProfilFavorite(@PathVariable("id") final UUID locationId, @RequestBody Profil profil) {
+    public Profil addProfilFavorite(@PathVariable("id") final UUID locationId, @RequestBody ProfilDTO profil) {
         Optional<Location> optionalLocation = locationService.getLocation(locationId);
         Optional<Profil> optionalProfil = profilService.getProfil(profil.getId());
 
@@ -76,7 +78,7 @@ public class FavoriteRestController {
 
 
     @PutMapping("/profil/favorite/delete/{id}")
-    public Profil deleteProfilFavorite(@PathVariable("id") final UUID locationId, @RequestBody Profil profil) {
+    public Profil deleteProfilFavorite(@PathVariable("id") final UUID locationId, @RequestBody ProfilDTO profil) {
         Optional<Location> optionalLocation = locationService.getLocation(locationId);
         Optional<Profil> optionalProfil = profilService.getProfil(profil.getId());
 
@@ -103,7 +105,7 @@ public class FavoriteRestController {
 
 
     @GetMapping("/profil/favorite/allfavorites/{id}")
-    public List<LocationDTO> getProfilAllFavorite(@PathVariable("id") final UUID profilId, @RequestBody Profil profil) {
+    public List<LocationDTO> getProfilAllFavorite(@PathVariable("id") final UUID profilId, @RequestBody ProfilDTO profil) {
         Optional<Profil> optionalProfil = profilService.getProfil(profilId);
 
         if (optionalProfil.isPresent()) {

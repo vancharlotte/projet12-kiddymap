@@ -44,8 +44,7 @@ public class LocationServiceImpl implements LocationService {
 
     @Override
     public boolean existLocation(float latitude, float longitude) {
-        boolean exist = locationDao.existsByLatitudeAndLongitude(latitude,longitude);
-        return exist;
+        return locationDao.existsByLatitudeAndLongitude(latitude,longitude);
     }
 
 

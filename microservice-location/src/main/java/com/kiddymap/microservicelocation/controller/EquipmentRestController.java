@@ -11,7 +11,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -28,11 +27,12 @@ public class EquipmentRestController {
     /**
      * Create - Add a new equipment
      *
-     * @param equipment An object equipment
+     * @param equipmentDTO An object equipment
      * @return The equipment object saved
      */
     @PostMapping("/equipment/protected/add")
-    public Equipment createEquipment(@RequestBody Equipment equipment) {
+    public Equipment createEquipment(@RequestBody EquipmentDTO equipmentDTO) {
+        Equipment equipment = modelMapper.map(equipmentDTO, Equipment.class);
         return equipmentService.saveEquipment(equipment);
     }
 
@@ -103,7 +103,7 @@ public class EquipmentRestController {
      * @return
      */
     @PutMapping("/equipment/protected/update/{id}")
-    public Equipment updateEquipment(@PathVariable("id") final UUID id, @RequestBody Equipment equipment) {
+    public Equipment updateEquipment(@PathVariable("id") final UUID id, @RequestBody EquipmentDTO equipment) {
         Optional<Equipment> e = equipmentService.getEquipment(id);
         if (e.isPresent()) {
             Equipment currentEquipment = e.get();

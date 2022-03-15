@@ -24,13 +24,13 @@ public class Profil implements Serializable {
     private String authId;
 
     @Column(name = "username")
-    String username;
+    private String username;
 
     @Column(name = "email")
-    String email;
+    private String email;
 
     @Column(name = "description")
-    String description;
+    private String description;
 
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(

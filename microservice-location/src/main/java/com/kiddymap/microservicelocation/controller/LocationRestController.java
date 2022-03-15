@@ -120,7 +120,6 @@ public class LocationRestController {
         featureCollection.put("type", "featureCollection");
         JSONArray featureList = new JSONArray();
 
-       try {
            for (Location obj : locationService.getAllLocationsInBetween(minLat, maxLat, minLong, maxLong)) {
 
                JSONObject feature = new JSONObject();
@@ -151,10 +150,8 @@ public class LocationRestController {
            featureCollection.put("features", featureList);
 
            return featureCollection;
-       }
-       catch (Exception e){
-           throw e;
-       }
+
+
     }
 
     /**
