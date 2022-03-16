@@ -3,7 +3,9 @@ package com.kiddymap.microservicelocation.controller;
 import com.kiddymap.microservicelocation.controller.dto.LocationDTO;
 import com.kiddymap.microservicelocation.controller.dto.LocationIncompleteDTO;
 import com.kiddymap.microservicelocation.exception.LocationNotFoundException;
+import com.kiddymap.microservicelocation.model.Equipment;
 import com.kiddymap.microservicelocation.model.Location;
+import com.kiddymap.microservicelocation.service.impl.EquipmentServiceImpl;
 import com.kiddymap.microservicelocation.service.impl.LocationServiceImpl;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -28,6 +30,9 @@ public class LocationRestControllerTest {
 
     @Mock
     private LocationServiceImpl locationServiceMock;
+
+    @Mock
+    private EquipmentServiceImpl equipmentServiceMock;
 
     @Mock
     private ModelMapper modelMapperMock;
@@ -75,6 +80,19 @@ public class LocationRestControllerTest {
     void createLocationTest(){
         Mockito.when(locationServiceMock.saveLocation(locationAdd)).thenReturn(locationAdd);
         assertEquals(locationAdd, locationRestController.createLocation(locationIncompleteDTO));
+    }
+
+    @Test
+    void createLocationTest_returnNull(){
+        Equipment equipment = new Equipment();
+        equipment.setId(UUID.randomUUID());
+        List<UUID> equipmentsList = new ArrayList<>();
+        equipmentsList.add(equipment.getId());
+        locationIncompleteDTO.setEquipments(equipmentsList);
+
+        Mockito.when(equipmentServiceMock.getEquipment(equipment.getId())).thenReturn(Optional.empty());
+        assertThrows(ResponseStatusException.class, () -> {  locationRestController.createLocation(locationIncompleteDTO);});
+        locationIncompleteDTO.setEquipments(null);
     }
 
     @Test
