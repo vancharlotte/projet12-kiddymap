@@ -46,13 +46,16 @@ public class LocationRestController {
         List<UUID> equipments = location.getEquipments();
         List<Equipment> newEquipments = new ArrayList<>();
 
-        for (int i = 0; i < equipments.size(); i++) {
-            Optional<Equipment> eq = equipmentService.getEquipment(equipments.get(i));
-            if (eq.isPresent()) {
-                newEquipments.add(eq.get());
-            } else {
-                throw new ResponseStatusException(
-                        HttpStatus.NOT_FOUND, "equipment not Found", new EquipmentNotFoundException("equipment not found"));
+        if(equipments!=null) {
+
+            for (int i = 0; i < equipments.size(); i++) {
+                Optional<Equipment> eq = equipmentService.getEquipment(equipments.get(i));
+                if (eq.isPresent()) {
+                    newEquipments.add(eq.get());
+                } else {
+                    throw new ResponseStatusException(
+                            HttpStatus.NOT_FOUND, "equipment not Found", new EquipmentNotFoundException("equipment not found"));
+                }
             }
         }
 
@@ -80,7 +83,7 @@ public class LocationRestController {
     public LocationDTO getLocation(@PathVariable("id") final UUID id) {
         Optional<Location> location = locationService.getLocation(id);
         if (location.isPresent()) {
-
+            System.out.println(location.get().getName());
             return modelMapper.map(location.get(), LocationDTO.class);
         } else {
             throw new ResponseStatusException(
@@ -168,16 +171,16 @@ public class LocationRestController {
         if (e.isPresent()) {
             List<UUID> equipments = location.getEquipments();
             List<Equipment> newEquipments = new ArrayList<>();
+            if(equipments!=null) {
+                for (int i = 0; i < equipments.size(); i++) {
+                    Optional<Equipment> eq = equipmentService.getEquipment(equipments.get(i));
+                    if (eq.isPresent()) {
+                        newEquipments.add(eq.get());
+                    } else {
+                        throw new ResponseStatusException(
+                                HttpStatus.NOT_FOUND, "equipment not Found", new EquipmentNotFoundException("equipment not found"));
 
-            for (int i = 0; i < equipments.size(); i++) {
-                Optional<Equipment> eq = equipmentService.getEquipment(equipments.get(i));
-                if (eq.isPresent()) {
-                    newEquipments.add(eq.get());
-                }
-                else {
-                    throw new ResponseStatusException(
-                            HttpStatus.NOT_FOUND, "equipment not Found", new EquipmentNotFoundException("equipment not found"));
-
+                    }
                 }
             }
 
