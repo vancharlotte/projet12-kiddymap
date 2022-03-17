@@ -1,6 +1,8 @@
 package com.kiddymap.microserviceprofil.controller;
 
+import com.kiddymap.microserviceprofil.controller.dto.LocationDTO;
 import com.kiddymap.microserviceprofil.controller.dto.ProfilDTO;
+import com.kiddymap.microserviceprofil.model.Favorite;
 import com.kiddymap.microserviceprofil.model.Location;
 import com.kiddymap.microserviceprofil.model.Profil;
 import com.kiddymap.microserviceprofil.service.impl.LocationServiceImpl;
@@ -12,6 +14,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeToken;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
@@ -33,10 +37,18 @@ public class FavoriteRestControllerTest {
     @Mock
     private LocationServiceImpl locationServiceMock;
 
+    @Mock
+    private ModelMapper modelMapperMock;
+
     private static Profil profil;
     private static ProfilDTO profilDTO;
 
     private static Location location;
+    private static List<Location> favorites;
+
+    private static Favorite favorite;
+
+
 
     @BeforeAll
     public static void setUp() {
@@ -57,10 +69,15 @@ public class FavoriteRestControllerTest {
         location.setName("location");
         location.setDescription("description");
 
-        List<Location> favorites = new ArrayList<>();
+
+        favorites = new ArrayList<>();
         favorites.add(location);
 
         profil.setFavoriteLocations(favorites);
+
+        favorite = new Favorite();
+        favorite.setProfilId(profil.getId());
+        favorite.setLocationId(location.getId());
 
     }
 
@@ -165,20 +182,45 @@ public class FavoriteRestControllerTest {
     public void getProfilAllFavoriteTest(){
         Mockito.when(profilServiceMock.getProfil(profil.getId())).thenReturn(Optional.of(profil));
         Mockito.when(profilServiceMock.getAllFavorites(profil.getId())).thenReturn(profil.getFavoriteLocations());
+        Mockito.when(modelMapperMock.map(favorites, new TypeToken<List<LocationDTO>>() {
+        }.getType())).thenReturn(favorites);
 
-     //   assertEquals(profil.getFavoriteLocations(), favoriteRestController.getProfilAllFavorite(profil.getId(),profil));
+        assertEquals(favorites, favoriteRestController.getProfilAllFavorite(profil.getId(),profilDTO));
 
     }
 
     @Test
     public void getProfilAllFavoriteTest_returnNull(){
         Mockito.when(profilServiceMock.getProfil(profil.getId())).thenReturn(Optional.empty());
-       // assertNull(favoriteRestController.getProfilAllFavorite(profil.getId(),profil));
-
+        assertThrows(ResponseStatusException.class, () -> {
+            favoriteRestController.getProfilAllFavorite(profil.getId(),profilDTO);});
     }
 
     @Test
-    public void existProfilFavorite(){}
+    public void existProfilFavorite(){
+        Mockito.when(profilServiceMock.getAuthIdFromToken()).thenReturn("abcd");
+        Mockito.when( profilServiceMock.getProfilByAuthId("abcd")).thenReturn(Optional.of(profil));
+        Mockito.when(profilServiceMock.existFavorite(profil.getId(), location.getId())).thenReturn(Optional.of(favorite));
+
+        assertTrue(favoriteRestController.existProfilFavorite(location.getId()));
+    }
+
+    @Test
+    public void existProfilFavorite_FavoriteNotExist(){
+        Mockito.when(profilServiceMock.getAuthIdFromToken()).thenReturn("abcd");
+        Mockito.when( profilServiceMock.getProfilByAuthId("abcd")).thenReturn(Optional.of(profil));
+        Mockito.when(profilServiceMock.existFavorite(profil.getId(), location.getId())).thenReturn(Optional.empty());
+
+        assertFalse(favoriteRestController.existProfilFavorite(location.getId()));
+    }
+
+    @Test
+    public void existProfilFavorite_ProfilNull(){
+        Mockito.when(profilServiceMock.getAuthIdFromToken()).thenReturn("abcd");
+        Mockito.when( profilServiceMock.getProfilByAuthId("abcd")).thenReturn(Optional.empty());
+
+        assertThrows(ResponseStatusException.class, () -> {
+            favoriteRestController.existProfilFavorite(location.getId());});    }
 
 
 }
