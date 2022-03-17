@@ -2,7 +2,6 @@ package com.kiddymap.microservicelocation.controller;
 
 import com.kiddymap.microservicelocation.controller.dto.LocationDTO;
 import com.kiddymap.microservicelocation.controller.dto.LocationIncompleteDTO;
-import com.kiddymap.microservicelocation.exception.LocationNotFoundException;
 import com.kiddymap.microservicelocation.model.Equipment;
 import com.kiddymap.microservicelocation.model.Location;
 import com.kiddymap.microservicelocation.service.impl.EquipmentServiceImpl;
@@ -15,13 +14,14 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@SpringBootTest
 @ExtendWith(MockitoExtension.class)
 public class LocationRestControllerTest {
 
@@ -43,6 +43,7 @@ public class LocationRestControllerTest {
     private static LocationDTO locationDTO;
     private static LocationIncompleteDTO locationIncompleteDTO;
     private static List<Location> locations;
+    private static String locationsJSON;
 
     @BeforeAll
     public static void createListLocations() {
@@ -73,6 +74,8 @@ public class LocationRestControllerTest {
         locationIncompleteDTO.setLongitude(1.0f);
         locationIncompleteDTO.setDescription("descriptionIncompleteDTO");
 
+        locationsJSON = "{\"features\":[{\"geometry\":{\"coordinates\":[1.0,1.0],\"type\":\"Point\"},\"type\":\"Feature\",\"properties\":{\"name\":\"locationIncompleteDTO\",\"description\":\"descriptionIncompleteDTO\",\"id\":{}}}],\"type\":\"featureCollection\"}";
+
 
     }
 
@@ -93,6 +96,19 @@ public class LocationRestControllerTest {
         Mockito.when(equipmentServiceMock.getEquipment(equipment.getId())).thenReturn(Optional.empty());
         assertThrows(ResponseStatusException.class, () -> {  locationRestController.createLocation(locationIncompleteDTO);});
         locationIncompleteDTO.setEquipments(null);
+    }
+
+    @Test
+    void existLocationTest(){
+            Mockito.when(locationServiceMock.existLocation(1.1f, 1.1f)).thenReturn(true);
+            assertTrue(locationRestController.existLocation(1.1f,1.1f));
+    }
+
+    @Test
+    void getLocationsGeoJsonInBetweenTest(){
+        Mockito.when(locationServiceMock.getAllLocationsInBetween(1f,2f,1f,2f)).thenReturn(locations);
+        assertEquals(locationsJSON, locationRestController.getLocationsGeoJsonInBetween(1f,2f,1f,2f).toJSONString());
+
     }
 
     @Test

@@ -1,4 +1,4 @@
-package com.kiddymap.microservicelocation.controller;
+/*package com.kiddymap.microservicelocation.controller;
 
 import com.kiddymap.microservicelocation.model.Equipment;
 import com.kiddymap.microservicelocation.service.impl.EquipmentServiceImpl;
@@ -18,6 +18,7 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
+@SpringBootTest
 @ExtendWith(MockitoExtension.class)
 public class EquipmentRestControllerTest {
 
@@ -86,3 +87,4 @@ public class EquipmentRestControllerTest {
 
 
 }
+*/
