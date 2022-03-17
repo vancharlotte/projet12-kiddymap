@@ -1,6 +1,8 @@
 package com.kiddymap.microserviceprofil.service;
 
+import com.kiddymap.microserviceprofil.dao.FavoriteDao;
 import com.kiddymap.microserviceprofil.dao.ProfilDao;
+import com.kiddymap.microserviceprofil.model.Favorite;
 import com.kiddymap.microserviceprofil.model.Location;
 import com.kiddymap.microserviceprofil.model.Profil;
 import com.kiddymap.microserviceprofil.service.impl.ProfilServiceImpl;
@@ -25,15 +27,21 @@ public class ProfilServiceImplTest {
     @Mock
     private ProfilDao profilDaoMock;
 
+    @Mock
+    private FavoriteDao favoriteDaoMock;
+
     private static Profil profil;
 
     private static Location location;
+
+    private static Favorite favorite;
 
 
     @BeforeAll
     public static void setUp() {
         profil = new Profil();
         profil.setId(UUID.randomUUID());
+        profil.setAuthId("abcd");
         profil.setUsername("profil");
         profil.setDescription("description1");
 
@@ -45,8 +53,12 @@ public class ProfilServiceImplTest {
         List<Location> favorites = new ArrayList<>();
         favorites.add(location);
 
-
         profil.setFavoriteLocations(favorites);
+
+        favorite = new Favorite();
+        favorite.setProfilId(profil.getId());
+        favorite.setLocationId(location.getId());
+
 
     }
 
@@ -55,6 +67,13 @@ public class ProfilServiceImplTest {
     void getProfilTest(){
         Mockito.when(profilDaoMock.findById(profil.getId())).thenReturn(Optional.of(profil));
         assertEquals(profil,profilService.getProfil(profil.getId()).get());
+
+    }
+
+    @Test
+    void getProfilByAuthIdTest(){
+        Mockito.when(profilDaoMock.findByAuthId(profil.getAuthId())).thenReturn(Optional.of(profil));
+        assertEquals(profil,profilService.getProfilByAuthId(profil.getAuthId()).get());
 
     }
 
@@ -100,9 +119,23 @@ public class ProfilServiceImplTest {
     }
 
     @Test
-    public void getAllFavoritesTest_returnNull(){
+    public void getAllFavoritesTest_returnEmpty(){
         Mockito.when(profilDaoMock.findById(profil.getId())).thenReturn(Optional.empty());
-        assertNull(profilService.getAllFavorites(profil.getId()));
+        assertEquals(Collections.emptyList(), profilService.getAllFavorites(profil.getId()));
+
+    }
+
+    @Test
+    public void existFavorite(){
+        Mockito.when(favoriteDaoMock.findByProfilIdAndLocationId(profil.getId(), location.getId())).thenReturn(Optional.of(favorite));
+        assertEquals(Optional.of(favorite), profilService.existFavorite(profil.getId(),location.getId()));
+
+    }
+
+    @Test
+    public void existFavorite_returnEmpty(){
+        Mockito.when(favoriteDaoMock.findByProfilIdAndLocationId(profil.getId(), location.getId())).thenReturn(Optional.empty());
+        assertEquals(Optional.empty(),profilService.existFavorite(profil.getId(),location.getId()));
 
     }
 
