@@ -1,5 +1,6 @@
-/*package com.kiddymap.microservicelocation.controller;
+package com.kiddymap.microservicelocation.controller;
 
+import com.kiddymap.microservicelocation.controller.dto.EquipmentDTO;
 import com.kiddymap.microservicelocation.model.Equipment;
 import com.kiddymap.microservicelocation.service.impl.EquipmentServiceImpl;
 import org.junit.jupiter.api.BeforeAll;
@@ -9,14 +10,16 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.modelmapper.ModelMapper;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @ExtendWith(MockitoExtension.class)
@@ -28,8 +31,12 @@ public class EquipmentRestControllerTest {
     @Mock
     private EquipmentServiceImpl equipmentServiceMock;
 
+    @Mock
+    private ModelMapper modelMapperMock;
 
     private static Equipment equipment;
+
+    private static EquipmentDTO equipmentDTO;
 
     private static List<Equipment> equipments;
 
@@ -39,6 +46,10 @@ public class EquipmentRestControllerTest {
         equipment.setId(UUID.randomUUID());
         equipment.setName("equipment");
 
+        equipmentDTO = new EquipmentDTO();
+        equipmentDTO.setId(UUID.randomUUID());
+        equipmentDTO.setName("equipmentDTO");
+
 
         equipments = new ArrayList<>();
         equipments.add(equipment);
@@ -46,40 +57,41 @@ public class EquipmentRestControllerTest {
     }
 
     @Test
-    void createEquipmentTest(){
+    void createEquipmentTest() {
+        Mockito.when(modelMapperMock.map(equipmentDTO, Equipment.class)).thenReturn(equipment);
         Mockito.when(equipmentServiceMock.saveEquipment(equipment)).thenReturn(equipment);
-      //  assertEquals(equipment, equipmentRestController.createEquipment(equipment));
+        assertEquals(equipment, equipmentRestController.createEquipment(equipmentDTO));
     }
 
     @Test
-    void getEquipmentTest(){
+    void getEquipmentTest() {
+        Mockito.when(modelMapperMock.map(equipment, EquipmentDTO.class)).thenReturn(equipmentDTO);
         Mockito.when(equipmentServiceMock.getEquipment(equipment.getId())).thenReturn(Optional.of(equipment));
-        assertEquals(equipment, equipmentRestController.getEquipment(equipment.getId()));
+        assertEquals( equipmentDTO, equipmentRestController.getEquipment(equipment.getId()));
     }
 
     @Test
-    void getEquipmentTest_returnNull(){
+    void getEquipmentTest_returnNull() {
         Mockito.when(equipmentServiceMock.getEquipment(equipment.getId())).thenReturn(Optional.empty());
-        assertNull(equipmentRestController.getEquipment(equipment.getId()));
-    }
+        assertThrows(ResponseStatusException.class, () -> {
+            equipmentRestController.getEquipment(equipment.getId());         });
+}
 
-    @Test
-    void getAllEquipmentsTest(){
-        Mockito.when(equipmentServiceMock.getAllEquipments()).thenReturn(equipments);
-        assertEquals(equipments, equipmentRestController.getAllEquipments());
-    }
+
 
     @Test
     void updateEquipmentTest(){
-        Mockito.when(equipmentServiceMock.getEquipment(equipment.getId())).thenReturn(Optional.of(equipment));
+        Mockito.when(equipmentServiceMock.getEquipment(equipmentDTO.getId())).thenReturn(Optional.of(equipment));
         Mockito.when(equipmentServiceMock.saveEquipment(equipment)).thenReturn(equipment);
-       // assertEquals(equipment, equipmentRestController.updateEquipment(equipment.getId(),equipment));
+        assertEquals(equipment, equipmentRestController.updateEquipment(equipmentDTO.getId(),equipmentDTO));
     }
 
     @Test
     void updateEquipmentTest_returnNull(){
-        Mockito.when(equipmentServiceMock.getEquipment(equipment.getId())).thenReturn(Optional.empty());
-      //  assertNull(equipmentRestController.updateEquipment(equipment.getId(),equipment));
+        Mockito.when(equipmentServiceMock.getEquipment(equipmentDTO.getId())).thenReturn(Optional.empty());
+        assertThrows(ResponseStatusException.class, () -> {
+            equipmentRestController.updateEquipment(equipmentDTO.getId(),equipmentDTO);         });
+
     }
 
 
@@ -87,4 +99,3 @@ public class EquipmentRestControllerTest {
 
 
 }
-*/

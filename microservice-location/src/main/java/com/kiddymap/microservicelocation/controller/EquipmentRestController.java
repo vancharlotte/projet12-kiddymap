@@ -83,19 +83,6 @@ public class EquipmentRestController {
 
 
     /**
-     * Read - Get all equipments
-     *
-     * @return - An Iterable object of equipment full filled
-     */
-    @GetMapping("/equipments/public/getAll")
-    public Iterable<EquipmentDTO> getAllEquipments() {
-        Iterable<Equipment> equipmentList = equipmentService.getAllEquipments();
-        return modelMapper.map(equipmentList, new TypeToken<List<EquipmentDTO>>() {
-        }.getType());
-
-    }
-
-    /**
      * Update - Update an existing equipment
      *
      * @param id        - The id of the equipment to update
