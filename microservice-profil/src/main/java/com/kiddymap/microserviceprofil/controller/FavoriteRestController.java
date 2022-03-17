@@ -14,9 +14,6 @@ import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -38,17 +35,6 @@ public class FavoriteRestController {
     @Autowired
     ModelMapper modelMapper;
 
-    public String getAuthId() {
-        try {
-            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-            Jwt jwt = (Jwt) authentication.getPrincipal();
-
-            return jwt.getClaims().get("sub").toString();
-        } catch (NullPointerException e) {
-            log.error("no authentication possible");
-            return null;
-        }
-    }
 
     @PutMapping("/profil/favorite/add/{id}")
     public Profil addProfilFavorite(@PathVariable("id") final UUID locationId, @RequestBody ProfilDTO profil) {
@@ -58,7 +44,7 @@ public class FavoriteRestController {
 
         if (optionalProfil.isPresent() && optionalLocation.isPresent()) {
 
-            if (!getAuthId().equals(optionalProfil.get().getAuthId())) {
+            if (!profilService.getAuthIdFromToken().equals(optionalProfil.get().getAuthId())) {
                 log.error("user not authorized : principal and authId different");
                 throw new ResponseStatusException(
                         HttpStatus.UNAUTHORIZED, "user not verified", new UserNotVerifiedException("principal and authId different"));
@@ -85,7 +71,7 @@ public class FavoriteRestController {
 
         if (optionalProfil.isPresent() && optionalLocation.isPresent()) {
 
-            if (!getAuthId().equals(optionalProfil.get().getAuthId())) {
+            if (!profilService.getAuthIdFromToken().equals(optionalProfil.get().getAuthId())) {
                 log.error("user not authorized : principal and authId different");
                 throw new ResponseStatusException(
                         HttpStatus.UNAUTHORIZED, "user not verified", new UserNotVerifiedException("principal and authId different"));
@@ -123,7 +109,7 @@ public class FavoriteRestController {
 
     @GetMapping("/profil/favorite/exist/{locationId}")
     public boolean existProfilFavorite(@PathVariable("locationId") final UUID locationId) {
-        Optional<Profil> optionalProfil = profilService.getProfilByAuthId(getAuthId());
+        Optional<Profil> optionalProfil = profilService.getProfilByAuthId(profilService.getAuthIdFromToken());
 
         if (optionalProfil.isPresent()) {
             Profil profil = optionalProfil.get();

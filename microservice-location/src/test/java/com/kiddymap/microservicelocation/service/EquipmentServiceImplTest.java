@@ -1,4 +1,4 @@
-package com.kiddymap.microservicelocation.service;
+package service;
 
 import com.kiddymap.microservicelocation.dao.EquipmentDao;
 import com.kiddymap.microservicelocation.model.Equipment;

@@ -1,5 +1,6 @@
 package com.kiddymap.microserviceprofil.controller;
 
+import com.kiddymap.microserviceprofil.controller.dto.ProfilDTO;
 import com.kiddymap.microserviceprofil.model.Location;
 import com.kiddymap.microserviceprofil.model.Profil;
 import com.kiddymap.microserviceprofil.service.impl.LocationServiceImpl;
@@ -11,14 +12,14 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
 public class FavoriteRestControllerTest {
@@ -33,6 +34,7 @@ public class FavoriteRestControllerTest {
     private LocationServiceImpl locationServiceMock;
 
     private static Profil profil;
+    private static ProfilDTO profilDTO;
 
     private static Location location;
 
@@ -40,8 +42,15 @@ public class FavoriteRestControllerTest {
     public static void setUp() {
         profil = new Profil();
         profil.setId(UUID.randomUUID());
+        profil.setAuthId("abcd");
         profil.setUsername("profil");
         profil.setDescription("description1");
+
+        profilDTO = new ProfilDTO();
+        profilDTO.setId(UUID.randomUUID());
+        profilDTO.setAuthId("abcd");
+        profilDTO.setUsername("profil");
+        profilDTO.setDescription("description1");
 
         location = new Location();
         location.setId(UUID.randomUUID());
@@ -57,74 +66,100 @@ public class FavoriteRestControllerTest {
 
     @Test
     public void addProfilFavoriteTest(){
-        Mockito.when(profilServiceMock.getProfil(profil.getId())).thenReturn(Optional.of(profil));
+        Mockito.when(profilServiceMock.getProfil(profilDTO.getId())).thenReturn(Optional.of(profil));
         Mockito.when(locationServiceMock.getLocation(location.getId())).thenReturn(Optional.of(location));
+        Mockito.when(profilServiceMock.getAuthIdFromToken()).thenReturn("abcd");
         Mockito.when(profilServiceMock.updateProfilFavorite(location,profil)).thenReturn(profil);
 
-       // assertEquals(profil, favoriteRestController.addProfilFavorite(location.getId(),profil));
+        assertEquals(profil, favoriteRestController.addProfilFavorite(location.getId(),profilDTO));
     }
 
     @Test
-    public void addProfilFavoriteTest_profilReturnNull(){
-        Mockito.when(profilServiceMock.getProfil(profil.getId())).thenReturn(Optional.empty());
+    public void addProfilFavoriteTest_profilReturnNull() {
+        Mockito.when(profilServiceMock.getProfil(profilDTO.getId())).thenReturn(Optional.empty());
         Mockito.when(locationServiceMock.getLocation(location.getId())).thenReturn(Optional.of(location));
 
-       // assertNull(favoriteRestController.addProfilFavorite(location.getId(),profil));
+        assertThrows(ResponseStatusException.class, () -> {
+            favoriteRestController.addProfilFavorite(location.getId(), profilDTO);
+        });
     }
 
     @Test
     public void addProfilFavoriteTest_locationReturnNull(){
-        Mockito.when(profilServiceMock.getProfil(profil.getId())).thenReturn(Optional.of(profil));
+        Mockito.when(profilServiceMock.getProfil(profilDTO.getId())).thenReturn(Optional.of(profil));
         Mockito.when(locationServiceMock.getLocation(location.getId())).thenReturn(Optional.empty());
 
-       // assertNull(favoriteRestController.addProfilFavorite(location.getId(),profil));
+        assertThrows(ResponseStatusException.class, () -> {
+            favoriteRestController.addProfilFavorite(location.getId(), profilDTO);
+        });
     }
 
 
     @Test
     public void addProfilFavoriteTest_profilAndLocationReturnNull(){
-        Mockito.when(profilServiceMock.getProfil(profil.getId())).thenReturn(Optional.empty());
+        Mockito.when(profilServiceMock.getProfil(profilDTO.getId())).thenReturn(Optional.empty());
         Mockito.when(locationServiceMock.getLocation(location.getId())).thenReturn(Optional.empty());
 
-      //  assertNull(favoriteRestController.addProfilFavorite(location.getId(),profil));
+        assertThrows(ResponseStatusException.class, () -> {
+            favoriteRestController.addProfilFavorite(location.getId(), profilDTO);
+        });
     }
+
+    @Test
+    public void addProfilFavoriteTest_profilNotVerified(){
+        assertThrows(ResponseStatusException.class, () -> {
+            favoriteRestController.addProfilFavorite(location.getId(),profilDTO);});
+    }
+
 
     @Test
     public void deleteProfilFavoriteTest(){
-        Mockito.when(profilServiceMock.getProfil(profil.getId())).thenReturn(Optional.of(profil));
+        Mockito.when(profilServiceMock.getProfil(profilDTO.getId())).thenReturn(Optional.of(profil));
         Mockito.when(locationServiceMock.getLocation(location.getId())).thenReturn(Optional.of(location));
-
+        Mockito.when(profilServiceMock.getAuthIdFromToken()).thenReturn("abcd");
         Mockito.when(profilServiceMock.deleteProfilFavorite(location,profil)).thenReturn(profil);
 
-//        assertEquals(profil, favoriteRestController.deleteProfilFavorite(location.getId(),profil));
-
-
+        assertEquals(profil, favoriteRestController.deleteProfilFavorite(location.getId(),profilDTO));
     }
 
     @Test
-    public void deleteProfilFavoriteTest_profilReturnNull(){
-        Mockito.when(profilServiceMock.getProfil(profil.getId())).thenReturn(Optional.empty());
+    public void deleteProfilFavoriteTest_profilReturnNull() {
+        Mockito.when(profilServiceMock.getProfil(profilDTO.getId())).thenReturn(Optional.empty());
         Mockito.when(locationServiceMock.getLocation(location.getId())).thenReturn(Optional.of(location));
 
-      //  assertNull(favoriteRestController.deleteProfilFavorite(location.getId(),profil));
-
+        assertThrows(ResponseStatusException.class, () -> {
+            favoriteRestController.deleteProfilFavorite(location.getId(), profilDTO);
+        });
     }
 
     @Test
     public void deleteProfilFavoriteTest_locationReturnNull(){
-        Mockito.when(profilServiceMock.getProfil(profil.getId())).thenReturn(Optional.of(profil));
+        Mockito.when(profilServiceMock.getProfil(profilDTO.getId())).thenReturn(Optional.of(profil));
         Mockito.when(locationServiceMock.getLocation(location.getId())).thenReturn(Optional.empty());
 
-        // assertNull(favoriteRestController.deleteProfilFavorite(location.getId(),profil));
+        assertThrows(ResponseStatusException.class, () -> {
+            favoriteRestController.deleteProfilFavorite(location.getId(), profilDTO);
+        });
     }
+
 
     @Test
     public void deleteProfilFavoriteTest_profilAndLocationReturnNull(){
-        Mockito.when(profilServiceMock.getProfil(profil.getId())).thenReturn(Optional.empty());
+        Mockito.when(profilServiceMock.getProfil(profilDTO.getId())).thenReturn(Optional.empty());
         Mockito.when(locationServiceMock.getLocation(location.getId())).thenReturn(Optional.empty());
 
-       // assertNull(favoriteRestController.deleteProfilFavorite(location.getId(),profil));
+        assertThrows(ResponseStatusException.class, () -> {
+            favoriteRestController.deleteProfilFavorite(location.getId(), profilDTO);
+        });
     }
+
+    @Test
+    public void deleteProfilFavoriteTest_profilNotVerified(){
+
+        assertThrows(ResponseStatusException.class, () -> {
+            favoriteRestController.deleteProfilFavorite(location.getId(),profilDTO);});
+    }
+
 
     @Test
     public void getProfilAllFavoriteTest(){
@@ -141,6 +176,9 @@ public class FavoriteRestControllerTest {
        // assertNull(favoriteRestController.getProfilAllFavorite(profil.getId(),profil));
 
     }
+
+    @Test
+    public void existProfilFavorite(){}
 
 
 }

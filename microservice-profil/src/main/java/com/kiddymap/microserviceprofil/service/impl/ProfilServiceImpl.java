@@ -7,6 +7,9 @@ import com.kiddymap.microserviceprofil.model.Location;
 import com.kiddymap.microserviceprofil.model.Profil;
 import com.kiddymap.microserviceprofil.service.contrat.ProfilService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,6 +28,13 @@ public class ProfilServiceImpl implements ProfilService {
     @Autowired
     FavoriteDao favoriteDao;
 
+
+    @Override
+    public String getAuthIdFromToken(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Jwt jwt = (Jwt) authentication.getPrincipal();
+        return jwt.getClaims().get("sub").toString();
+    }
 
     @Override
     public Optional<Profil> getProfil(final UUID id) {

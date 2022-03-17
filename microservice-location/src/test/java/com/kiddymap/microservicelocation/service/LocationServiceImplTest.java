@@ -1,4 +1,4 @@
-package com.kiddymap.microservicelocation.service;
+package service;
 
 import com.kiddymap.microservicelocation.dao.LocationDao;
 import com.kiddymap.microservicelocation.model.Location;
@@ -18,6 +18,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest
 @ExtendWith(MockitoExtension.class)
@@ -47,6 +48,12 @@ public class LocationServiceImplTest {
 
 
     @Test
+    void saveLocationTest(){
+        Mockito.when(locationDaoMock.save(location)).thenReturn(location);
+        assertEquals(location , locationService.saveLocation(location));
+    }
+
+    @Test
     void getLocationTest(){
         Mockito.when(locationDaoMock.findById(location.getId())).thenReturn(Optional.of(location));
         assertEquals(location , locationService.getLocation(location.getId()).get());
@@ -66,9 +73,16 @@ public class LocationServiceImplTest {
     }
 
     @Test
-    void saveLocationTest(){
-        Mockito.when(locationDaoMock.save(location)).thenReturn(location);
-        assertEquals(location , locationService.saveLocation(location));
+    void getAllLocationsInBetween(){
+        Mockito.when(locationDaoMock.findAllLocationInBetween(1f,2f,1f,2f)).thenReturn(locations);
+        assertEquals(locations, locationService.getAllLocationsInBetween(1f,2f,1f,2f));
     }
+
+    @Test
+    void existLocation(){
+        Mockito.when(locationDaoMock.existsByLatitudeAndLongitude(1f,1f)).thenReturn(true);
+        assertTrue(locationService.existLocation(1f,1f));
+    }
+
 
 }

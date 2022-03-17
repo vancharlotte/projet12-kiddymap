@@ -1,5 +1,6 @@
-package com.kiddymap.microservicelocation.controller;
+package controller;
 
+import com.kiddymap.microservicelocation.controller.LocationRestController;
 import com.kiddymap.microservicelocation.controller.dto.LocationDTO;
 import com.kiddymap.microservicelocation.controller.dto.LocationIncompleteDTO;
 import com.kiddymap.microservicelocation.model.Equipment;

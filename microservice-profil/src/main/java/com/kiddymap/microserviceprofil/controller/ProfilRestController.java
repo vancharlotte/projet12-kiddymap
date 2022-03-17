@@ -38,6 +38,8 @@ public class ProfilRestController {
     JwtDecoder jwtDecoder;
 
 
+
+
     /**
      * Create - Add a new profil
      *
@@ -75,13 +77,10 @@ public class ProfilRestController {
      */
     @GetMapping("/profil/get/id/{id}")
     public ProfilDTO getProfil(@PathVariable("id") final UUID id) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Jwt jwt = (Jwt) authentication.getPrincipal();
-
         Optional<Profil> profil = profilService.getProfil(id);
 
         if (profil.isPresent()) {
-            if (profil.get().getAuthId().equals(jwt.getClaims().get("sub"))) {
+            if (profil.get().getAuthId().equals(profilService.getAuthIdFromToken())) {
             return modelMapper.map(profil.get(), ProfilDTO.class);
             } else {
                 throw new ResponseStatusException(
@@ -103,10 +102,9 @@ public class ProfilRestController {
      */
     @GetMapping("/profil/get/auth")
     public ProfilDTO getProfilByAuthId() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Jwt jwt = (Jwt) authentication.getPrincipal();
 
-        Optional<Profil> profil = profilService.getProfilByAuthId(jwt.getClaims().get("sub").toString());
+
+        Optional<Profil> profil = profilService.getProfilByAuthId(profilService.getAuthIdFromToken());
         if (profil.isPresent()) {
             return modelMapper.map(profil.get(), ProfilDTO.class);
         } else {
@@ -117,17 +115,6 @@ public class ProfilRestController {
 
 
     /**
-     * Read - Get all profils
-     * @return - An Iterable object of Profil full filled
-     */
-
-   /* @GetMapping("/profils")
-    public Iterable<Profil> getProfils() {
-        Iterable<Profil> profilList = profilService.getAllProfils();
-        return modelMapper.map(profilList, new TypeToken<List<ProfilDTO>>() {}.getType());
-    }*/
-
-    /**
      * Update - Update an existing profil
      *
      * @param id     - The id of the profil to update
@@ -136,10 +123,9 @@ public class ProfilRestController {
      */
     @PutMapping("/profil/update/{id}")
     public Profil updateProfil(@PathVariable("id") final UUID id, @RequestBody ProfilDTO profil) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Jwt jwt = (Jwt) authentication.getPrincipal();
 
-        if (profil.getAuthId().equals(jwt.getClaims().get("sub"))) {
+
+        if (profil.getAuthId().equals(profilService.getAuthIdFromToken())) {
 
             Optional<Profil> e = profilService.getProfil(id);
 

@@ -1,19 +1,29 @@
 package com.kiddymap.microserviceprofil.service.impl;
 
+import com.kiddymap.microserviceprofil.service.contrat.AuthService;
 import com.nimbusds.jose.shaded.json.JSONObject;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
-@Repository
+@Service
+@Transactional
 @Slf4j
-public class AuthServiceImpl {
+public class AuthServiceImpl implements AuthService {
 
     @Autowired
     RestTemplate restTemplate;
 
+
+
+    @Override
     public ResponseEntity<JSONObject> getTokenAuth() {
             JSONObject ob = new JSONObject();
             ob.put("grant_type", "client_credentials");
@@ -32,6 +42,7 @@ public class AuthServiceImpl {
 
     }
 
+    @Override
     public ResponseEntity<String> updateEmail(String authId, String email) {
             ResponseEntity<JSONObject> token = getTokenAuth();
             String url = "https://dev-kiddymap.eu.auth0.com/api/v2/users/" + authId;
@@ -51,6 +62,7 @@ public class AuthServiceImpl {
 
     }
 
+    @Override
     public ResponseEntity<String> addRoleToUser(String id) {
             ResponseEntity<JSONObject> token = getTokenAuth();
             String url = "https://dev-kiddymap.eu.auth0.com/api/v2/users/" + id + "/roles";

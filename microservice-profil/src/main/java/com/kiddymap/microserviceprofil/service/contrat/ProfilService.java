@@ -11,6 +11,8 @@ import java.util.UUID;
 public interface ProfilService {
 
 
+    String getAuthIdFromToken();
+
     Optional<Profil> getProfil(UUID id);
 
     Profil updateProfil(Profil profil);
