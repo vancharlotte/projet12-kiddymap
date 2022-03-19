@@ -16,24 +16,13 @@ class MicroserviceLocationApplicationTests {
 
 
 
-	@Autowired
-	private LocationRestController locationRestController;
-
-	@Autowired
-	private EquipmentRestController equipmentRestController;
-
-	@Autowired
-	private LocationService locationService;
-
-	@Autowired
-	private EquipmentService equipmentService;
 
 	@Test
 	public void contextLoads() {
-		assertNotNull(locationRestController);
-		assertNotNull(equipmentRestController);
-		assertNotNull(locationService);
-		assertNotNull(equipmentService);
+		assertNotNull(LocationRestController.class);
+		assertNotNull(EquipmentRestController.class);
+		assertNotNull(LocationService.class);
+		assertNotNull(EquipmentService.class);
 	}
 
 }

@@ -14,28 +14,16 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 @SpringBootTest
 class MicroserviceProfilApplicationTests {
 
-	@Autowired
-	private ProfilRestController profilRestController;
 
-	@Autowired
-	private FavoriteRestController favoriteRestController;
 
-	@Autowired
-	private ProfilService profilService;
-
-	@Autowired
-	private LocationService locationService;
-
-	@Autowired
-	private AuthService authService;
 
 	@Test
 	public void contextLoads() {
-		assertNotNull(profilRestController);
-		assertNotNull(favoriteRestController);
-		assertNotNull(profilService);
-		assertNotNull(locationService);
-		assertNotNull(authService);
+		assertNotNull(ProfilRestController.class);
+		assertNotNull(FavoriteRestController.class);
+		assertNotNull(ProfilService.class);
+		assertNotNull(LocationService.class);
+		assertNotNull(AuthService.class);
 
 	}
 }

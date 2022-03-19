@@ -1,6 +1,5 @@
-package controller;
+package com.kiddymap.microservicelocation.controller;
 
-import com.kiddymap.microservicelocation.controller.EquipmentRestController;
 import com.kiddymap.microservicelocation.controller.dto.EquipmentDTO;
 import com.kiddymap.microservicelocation.model.Equipment;
 import com.kiddymap.microservicelocation.service.impl.EquipmentServiceImpl;
@@ -12,7 +11,6 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
@@ -22,7 +20,6 @@ import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@SpringBootTest
 @ExtendWith(MockitoExtension.class)
 public class EquipmentRestControllerTest {
 

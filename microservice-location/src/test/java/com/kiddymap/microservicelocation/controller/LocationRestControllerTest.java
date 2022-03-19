@@ -1,4 +1,4 @@
-package controller;
+package com.kiddymap.microservicelocation.controller;
 
 import com.kiddymap.microservicelocation.controller.LocationRestController;
 import com.kiddymap.microservicelocation.controller.dto.LocationDTO;
@@ -22,7 +22,6 @@ import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@SpringBootTest
 @ExtendWith(MockitoExtension.class)
 public class LocationRestControllerTest {
 
