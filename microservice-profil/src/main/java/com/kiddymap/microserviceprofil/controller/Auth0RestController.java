@@ -19,8 +19,17 @@ public class Auth0RestController {
     @Autowired
     RestTemplate restTemplate;
 
-  /*  @GetMapping("/profil/protected/auth/add/signup")
-    public ResponseEntity<String> accessAuth(@RequestBody JSONObject ob) {
+
+    /**
+   * Create - Add a new user to auth0
+   *
+   * @param locationId Id of object Location
+   * @param JSONObject ob An object JSON
+   * @return response
+   */
+    /*
+  @GetMapping("/profil/protected/auth/add/signup")
+    public ResponseEntity<String> addSignUp(@RequestBody JSONObject ob) {
         try {
             ob.put("client_id", "4xx8AmoU9nEEbWWWOQJpli8IRxuzr0p4");
             ob.put("connection", "Username-Password-Authentication");
@@ -41,7 +50,11 @@ public class Auth0RestController {
     }*/
 
 
-   /* @GetMapping("/profil/protected/auth/get/allUsers")
+    /**
+     * Get all users from Auth0
+     * @return response
+     */
+    /* @GetMapping("/profil/protected/auth/get/allUsers")
     public ResponseEntity<String> getAllAuth() {
         try {
             ResponseEntity<JSONObject> ob = authService.getTokenAuth();

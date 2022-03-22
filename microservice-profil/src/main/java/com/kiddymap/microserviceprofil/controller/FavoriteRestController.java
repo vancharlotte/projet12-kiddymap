@@ -36,6 +36,13 @@ public class FavoriteRestController {
     ModelMapper modelMapper;
 
 
+    /**
+     * Add a new favorite
+     *
+     * @param locationId Id of object Location
+     * @param profil An object profilDTO
+     * @return The profil object saved
+     */
     @PutMapping("/profil/favorite/add/{id}")
     public Profil addProfilFavorite(@PathVariable("id") final UUID locationId, @RequestBody ProfilDTO profil) {
         Optional<Location> optionalLocation = locationService.getLocation(locationId);
@@ -63,6 +70,13 @@ public class FavoriteRestController {
     }
 
 
+    /**
+     * Delete a favorite
+     *
+     * @param locationId Id of object Location
+     * @param profil An object profilDTO
+     * @return The profil object saved
+     */
     @PutMapping("/profil/favorite/delete/{id}")
     public Profil deleteProfilFavorite(@PathVariable("id") final UUID locationId, @RequestBody ProfilDTO profil) {
         Optional<Location> optionalLocation = locationService.getLocation(locationId);
@@ -90,6 +104,13 @@ public class FavoriteRestController {
     }
 
 
+    /**
+     * Get a list of favorites form a profil
+     *
+     * @param profilId Id of object Profil
+     * @param profil An object profilDTO
+     * @return List of LocationDTO
+     */
     @GetMapping("/profil/favorite/allfavorites/{id}")
     public List<LocationDTO> getProfilAllFavorite(@PathVariable("id") final UUID profilId, @RequestBody ProfilDTO profil) {
         Optional<Profil> optionalProfil = profilService.getProfil(profilId);
@@ -106,7 +127,12 @@ public class FavoriteRestController {
 
     }
 
-
+    /**
+     * Do the favorite exist?
+     *
+     * @param locationId Id of object Location
+     * @return boolean exist
+     */
     @GetMapping("/profil/favorite/exist/{locationId}")
     public boolean existProfilFavorite(@PathVariable("locationId") final UUID locationId) {
         Optional<Profil> optionalProfil = profilService.getProfilByAuthId(profilService.getAuthIdFromToken());

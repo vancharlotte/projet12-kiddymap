@@ -37,7 +37,7 @@ public class LocationRestController {
     /**
      * Create - Add a new location
      *
-     * @param location An object location
+     * @param location An object LocationIncompleteDTO
      * @return The location object saved
      */
     @PostMapping("/location/protected/add")
@@ -77,7 +77,7 @@ public class LocationRestController {
      * Read - Get one location
      *
      * @param id The id of the location
-     * @return A location object full filled
+     * @return A locationDTO object
      */
     @GetMapping("/location/public/get/{id}")
     public LocationDTO getLocation(@PathVariable("id") final UUID id) {
@@ -96,8 +96,9 @@ public class LocationRestController {
     /**
      * Read - Exist
      *
-     * @param latitude the lat of the location, long the long of the location
-     * @return A location object full filled
+     * @param latitude the latitude of the location
+     * @param longitude the longitude of the location
+     * @return exist
      */
     @GetMapping("/location/protected/exist/{lat}/{long}")
     public boolean existLocation(@PathVariable("lat") float latitude, @PathVariable("long") float longitude) {
@@ -117,6 +118,14 @@ public class LocationRestController {
         }.getType());
     }*/
 
+    /**
+     * Read - Get all locations
+     * @param minLat minimum latitude
+     * @param maxLat maximum latitude
+     * @param minLong minimum longitude
+     * @param maxLong maximum longitude
+     * @return - A List of Location with GeoJSON format
+     */
     @GetMapping("/location/public/getAllGeoJson/{minLat}/{maxLat}/{minLong}/{maxLong}")
     public JSONObject getLocationsGeoJsonInBetween(@PathVariable("minLat") float minLat, @PathVariable("maxLat") float maxLat, @PathVariable("minLong") float minLong, @PathVariable("maxLong") float maxLong) {
         JSONObject featureCollection = new JSONObject();
@@ -161,8 +170,8 @@ public class LocationRestController {
      * Update - Update an existing location
      *
      * @param id       - The id of the location to update
-     * @param location - The location object updated
-     * @return
+     * @param location - A LocationIncompleteDTO object
+     * @return location saved
      */
     @PutMapping("/location/protected/update/{id}")
     public Location updateLocation(@PathVariable("id") final UUID id, @RequestBody LocationIncompleteDTO location) {
