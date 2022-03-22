@@ -23,7 +23,7 @@
 		<module>microservice-profil</module>
 		<module>microservice-location</module>
 		<module>api-gateway</module>
-	</modules>
+    </modules>
 
 
 	<properties>

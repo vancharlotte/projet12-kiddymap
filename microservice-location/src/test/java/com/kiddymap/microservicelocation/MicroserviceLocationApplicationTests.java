@@ -16,13 +16,13 @@ class MicroserviceLocationApplicationTests {
 
 
 
-
+/*
 	@Test
 	public void contextLoads() {
 		assertNotNull(LocationRestController.class);
 		assertNotNull(EquipmentRestController.class);
 		assertNotNull(LocationService.class);
 		assertNotNull(EquipmentService.class);
-	}
+	}*/
 
 }

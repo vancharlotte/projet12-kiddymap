@@ -1,0 +1,121 @@
+version: '2'
+services:
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+    networks:
+      - kiddymap-network
+  kiddymap-db:
+    image: postgres:9.4
+    ports:
+      - "5432:5432"
+    expose:
+      - "5432"
+    volumes:
+      - "./docker/init/db/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d"
+    environment:
+      - POSTGRES_DB=db_kiddymap
+      - POSTGRES_USER=usr_kiddymap
+      - POSTGRES_PASSWORD=kiddymap
+    networks:
+      - kiddymap-network
+  config-server:
+    image: config-server
+    container_name: config-server
+    build:
+      context: ./config-server
+      dockerfile: Dockerfile
+    ports:
+      - "9001:9001"
+    expose:
+      - "9001"
+    environment:
+      spring.cloud.config.server.git.uri : https://github.com/vancharlotte/projet12-config.git
+    networks:
+      - kiddymap-network
+  eureka-server:
+    depends_on:
+      - config-server
+    image: eureka-server
+    container_name: eureka-server
+    build:
+        context: ./eureka-server
+        dockerfile: Dockerfile
+    ports:
+        - "8761:8761"
+    expose:
+        - "8761"
+    environment:
+      spring.config.import: optional:configserver:http://config-server:9001
+      eureka.client.serviceUrl.defaultZone : http://eureka-server:8761/eureka/
+    networks:
+      - kiddymap-network
+  api-gateway:
+    depends_on:
+      - config-server
+      - eureka-server
+    image: api-gateway
+    container_name: api-gateway
+    build:
+      context: ./api-gateway
+      dockerfile: Dockerfile
+    ports:
+        - "9004:9004"
+    expose:
+        - "9004"
+    environment:
+      spring.config.import: optional:configserver:http://config-server:9001
+      eureka.client.serviceUrl.defaultZone : http://eureka-server:8761/eureka/
+    networks:
+      - kiddymap-network
+  microservice-profil:
+    depends_on:
+      - config-server
+      - eureka-server
+      - kiddymap-db
+    image: microservice-profil
+    container_name: microservice-profil
+    build:
+      context: ./microservice-profil
+      dockerfile: Dockerfile
+    ports:
+      - "9002:9002"
+    expose:
+      - "9002"
+    environment:
+      spring.config.import: optional:configserver:http://config-server:9001
+      eureka.client.serviceUrl.defaultZone: http://eureka-server:8761/eureka/
+      spring.datasource.url: jdbc:postgresql://kiddymap-db:5432/db_kiddymap
+      spring.datasource.username : usr_kiddymap
+      spring.datasource.password : kiddymap
+      spring.jpa.hibernate.ddl-auto: update
+    networks:
+      - kiddymap-network
+  microservice-location:
+    depends_on:
+      - config-server
+      - eureka-server
+      - kiddymap-db
+    image: microservice-location
+    container_name: microservice-location
+    build:
+      context: ./microservice-location
+      dockerfile: Dockerfile
+    ports:
+      - "9003:9003"
+    expose:
+      - "9003"
+    environment:
+      spring.config.import: optional:configserver:http://config-server:9001
+      eureka.client.serviceUrl.defaultZone: http://eureka-server:8761/eureka/
+      spring.datasource.url: jdbc:postgresql://kiddymap-db:5432/db_kiddymap
+      spring.datasource.username: usr_kiddymap
+      spring.datasource.password: kiddymap
+      spring.jpa.hibernate.ddl-auto: update
+    networks:
+      - kiddymap-network
+
+networks:
+  kiddymap-network :
