@@ -1277,7 +1277,12 @@
 
 
     INSERT INTO equipment (equipment_id, name)
-    VALUES ('75892ad1-24ce-4ea6-b05e-ac33a5423954',	'table à langer');
+    VALUES  ('3138aa5d-23ec-4836-b387-0ddf5eaa23f9',	'chaise haute'),
+            ('75892ad1-24ce-4ea6-b05e-ac33a5423954', 'table à langer'),
+            ('545fa4c6-2be2-4862-87a4-d4d82c0e8be0', 'micro-onde'),
+            ('4236e64a-1718-4809-b0b1-d13f72f599a4', 'aire de jeu'),
+            ('3bb45472-a960-4a9c-b252-b57046581384', 'parking poussette'),
+           ('3181e984-cdd8-48d9-a7cc-b5d33f669448',	'espace allaitement');
 
     INSERT INTO location_equipment (location_id, equipment_id)
     VALUES ('d2d4b202-1fa1-4934-9ebb-b2d3202ffa48','75892ad1-24ce-4ea6-b05e-ac33a5423954');

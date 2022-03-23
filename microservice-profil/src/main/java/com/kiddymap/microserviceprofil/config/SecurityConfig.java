@@ -32,6 +32,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
                 .mvcMatchers("/profil/protected/**").hasRole("admin")
                 .mvcMatchers("/profil/add").permitAll()
+                .mvcMatchers("/swagger-resources/**", "/swagger-ui.html", "/swagger-ui/**", "/v2/api-docs", "/webjars/**" ).permitAll()
+                .mvcMatchers("/microservice-profil/v2/api-docs","/microservice-profil/swagger-ui/**", "/microservice-profil/api/swagger-ui/**", "/microservice-location/api/swagger-ui.html").permitAll()
                 .mvcMatchers("/profil/get/**").authenticated()
                 .mvcMatchers("/profil/update/**").hasAuthority("update:user")
                 .mvcMatchers("/profil/favorite/**").hasAuthority("update:user")

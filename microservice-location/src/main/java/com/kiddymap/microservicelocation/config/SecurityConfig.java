@@ -29,6 +29,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 .mvcMatchers("/location/public/**").permitAll()
+                .mvcMatchers("/swagger-resources/**", "/swagger-ui.html", "/swagger-ui/**", "/v2/api-docs", "/webjars/**" ).permitAll()
+                .mvcMatchers("/microservice-location/v2/api-docs", "/microservice-location/api/swagger-ui/**", "/microservice-location/swagger-ui/**", "/microservice-location/api/swagger-ui.html").permitAll()
                 .mvcMatchers("/location/protected/delete/**").hasAuthority("delete:location")
                 .mvcMatchers("/location/protected/exist/**").hasAuthority("update:location")
                 .mvcMatchers("/location/protected/update/**").hasAuthority("update:location")
