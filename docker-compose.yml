@@ -32,8 +32,6 @@ services:
       - "9001:9001"
     expose:
       - "9001"
-    environment:
-      spring.cloud.config.server.git.uri : https://github.com/vancharlotte/projet12-config.git
     networks:
       - kiddymap-network
   eureka-server:
@@ -49,9 +47,6 @@ services:
     expose:
         - "8761"
     restart: "always"
-    environment:
-      spring.config.import: optional:configserver:http://config-server:9001
-      eureka.client.serviceUrl.defaultZone : http://eureka-server:8761/eureka/
     networks:
       - kiddymap-network
   api-gateway:
@@ -68,9 +63,6 @@ services:
     expose:
         - "9004"
     restart: "always"
-    environment:
-      spring.config.import: optional:configserver:http://config-server:9001
-      eureka.client.serviceUrl.defaultZone : http://eureka-server:8761/eureka/
     networks:
       - kiddymap-network
   microservice-profil:
@@ -88,13 +80,6 @@ services:
     expose:
       - "9002"
     restart: "always"
-    environment:
-      spring.config.import: optional:configserver:http://config-server:9001
-      eureka.client.serviceUrl.defaultZone: http://eureka-server:8761/eureka/
-      spring.datasource.url: jdbc:postgresql://kiddymap-db:5432/db_kiddymap
-      spring.datasource.username : usr_kiddymap
-      spring.datasource.password : kiddymap
-      spring.jpa.hibernate.ddl-auto: update
     networks:
       - kiddymap-network
   microservice-location:
@@ -112,13 +97,6 @@ services:
     expose:
       - "9003"
     restart: "always"
-    environment:
-      spring.config.import: optional:configserver:http://config-server:9001
-      eureka.client.serviceUrl.defaultZone: http://eureka-server:8761/eureka/
-      spring.datasource.url: jdbc:postgresql://kiddymap-db:5432/db_kiddymap
-      spring.datasource.username : usr_kiddymap
-      spring.datasource.password : kiddymap
-      spring.jpa.hibernate.ddl-auto: update
     networks:
       - kiddymap-network
 

@@ -1,6 +1,8 @@
 
 	INSERT INTO profil (profil_id, auth_id, username, email, description)
-	VALUES ('31482d4d-2124-414c-b186-8dbf1886af7f','auth0|61a61c7b7ee9bf00707c2447', 'profil 1', 'vanhuyse.charlotte@gmail.com',	'description du profil 1'	);
+	VALUES
+    ('31482d4d-2124-414c-b186-8dbf1886af7f','auth0|61a61c7b7ee9bf00707c2447', 'profil 1', 'vanhuyse.charlotte@gmail.com',	'description du profil 1'	),
+    ('7536c972-0d68-4503-9c20-a002dfff1858','auth0|623b07516253630071cd1536', 'profil test user', 'test@test.com',	'description du profil test'	);
 
     INSERT INTO location (location_id, longitude, latitude, name, description)
     VALUES
