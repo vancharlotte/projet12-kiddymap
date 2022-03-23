@@ -19,7 +19,6 @@ import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@SpringBootTest
 @ExtendWith(MockitoExtension.class)
 public class EquipmentServiceImplTest {
 
@@ -45,7 +44,7 @@ public class EquipmentServiceImplTest {
         equipments.add(equipment);
 
     }
-/*
+
     @Test
     void getEquipmentTest(){
         Mockito.when(equipmentDaoMock.findById(equipment.getId())).thenReturn(Optional.of(equipment));
@@ -69,5 +68,5 @@ public class EquipmentServiceImplTest {
     void saveEquipmentTest(){
         Mockito.when(equipmentDaoMock.save(equipment)).thenReturn(equipment);
         assertEquals(equipment, equipmentService.saveEquipment(equipment));
-    }*/
+    }
 }

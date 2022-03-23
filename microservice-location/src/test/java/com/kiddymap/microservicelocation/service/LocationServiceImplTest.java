@@ -10,7 +10,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +19,6 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@SpringBootTest
 @ExtendWith(MockitoExtension.class)
 public class LocationServiceImplTest {
 
@@ -46,7 +44,7 @@ public class LocationServiceImplTest {
 
     }
 
-/*
+
     @Test
     void saveLocationTest(){
         Mockito.when(locationDaoMock.save(location)).thenReturn(location);
@@ -84,5 +82,5 @@ public class LocationServiceImplTest {
         assertTrue(locationService.existLocation(1f,1f));
     }
 
-*/
+
 }

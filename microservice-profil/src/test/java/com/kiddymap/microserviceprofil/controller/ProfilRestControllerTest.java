@@ -5,7 +5,7 @@ import com.kiddymap.microserviceprofil.model.Location;
 import com.kiddymap.microserviceprofil.model.Profil;
 import com.kiddymap.microserviceprofil.service.impl.AuthServiceImpl;
 import com.kiddymap.microserviceprofil.service.impl.ProfilServiceImpl;
-import com.nimbusds.jwt.JWT;
+
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,11 +14,6 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
@@ -28,7 +23,6 @@ import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@SpringBootTest
 @ExtendWith(MockitoExtension.class)
 public class ProfilRestControllerTest {
 
@@ -37,6 +31,9 @@ public class ProfilRestControllerTest {
 
     @Mock
     private ProfilServiceImpl profilServiceMock;
+
+    @Mock
+    private AuthServiceImpl authServiceMock;
 
     @Mock
     private ModelMapper modelMapperMock;
@@ -82,16 +79,16 @@ public class ProfilRestControllerTest {
 
     }
 
-/*
+
     @Test
     void createProfilTest_exist(){
         Mockito.when( profilServiceMock.getProfilByAuthId(profilDTO.getAuthId())).thenReturn(Optional.of(profil));
         assertEquals(profil,profilRestController.createProfil(profilDTO));
     }
-*/
-/*    @Test
+
+    @Test
     void createProfilTest_new(){
-        Mockito.when( profilServiceMock.getProfilByAuthId(profilDTO.getAuthId())).thenReturn(Optional.empty());
+        Mockito.when(profilServiceMock.getProfilByAuthId(profilDTO.getAuthId())).thenReturn(Optional.empty());
 
         Profil profil2 = new Profil();
         profil2.setAuthId(profilDTO.getAuthId());
@@ -99,11 +96,12 @@ public class ProfilRestControllerTest {
         profil2.setEmail(profilDTO.getEmail());
         profil2.setDescription(profilDTO.getDescription());
 
+        Mockito.when(authServiceMock.addRoleToUser(profilDTO.getAuthId())).thenReturn(null);
         Mockito.when(profilServiceMock.saveProfil(profil2)).thenReturn(profil);
         assertEquals(profil,profilRestController.createProfil(profilDTO));
-    }*/
+    }
 
- /*  @Test
+   @Test
     void getProfilTest(){
        Mockito.when(profilServiceMock.getProfil(profil.getId())).thenReturn(Optional.of(profil));
        Mockito.when(profilServiceMock.getAuthIdFromToken()).thenReturn("abcd");
@@ -179,7 +177,7 @@ public class ProfilRestControllerTest {
         assertThrows(ResponseStatusException.class, () -> {  profilRestController.updateProfil(profil.getId(), profilDTO);});
 
     }
-*/
+
   /*  @Test
     void deleteProfilTest(){
         profilRestController.deleteProfil(profil.getId());

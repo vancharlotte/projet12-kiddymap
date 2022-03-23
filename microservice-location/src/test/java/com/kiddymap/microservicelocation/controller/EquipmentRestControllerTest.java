@@ -13,8 +13,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -36,7 +34,6 @@ public class EquipmentRestControllerTest {
 
     private static EquipmentDTO equipmentDTO;
 
-    private static List<Equipment> equipments;
 
     @BeforeAll
     public static void createListEquipments() {
@@ -47,10 +44,6 @@ public class EquipmentRestControllerTest {
         equipmentDTO = new EquipmentDTO();
         equipmentDTO.setId(UUID.randomUUID());
         equipmentDTO.setName("equipmentDTO");
-
-
-        equipments = new ArrayList<>();
-        equipments.add(equipment);
 
     }
 
