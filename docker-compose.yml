@@ -1,4 +1,4 @@
-version: '2'
+version: '3'
 services:
   adminer:
     image: adminer
@@ -7,8 +7,9 @@ services:
       - 8080:8080
     networks:
       - kiddymap-network
+
   kiddymap-db:
-    image: postgres:9.4
+    image: postgres:14
     ports:
       - "5432:5432"
     expose:
@@ -22,6 +23,7 @@ services:
       - POSTGRES_PASSWORD=kiddymap
     networks:
       - kiddymap-network
+
   config-server:
     image: config-server
     container_name: config-server
@@ -34,9 +36,13 @@ services:
       - "9001"
     networks:
       - kiddymap-network
+    healthcheck:
+      test: curl http://config-server:9001
+
   eureka-server:
     depends_on:
-      - config-server
+      config-server:
+        condition: service_healthy
     image: eureka-server
     container_name: eureka-server
     build:
@@ -49,6 +55,7 @@ services:
     restart: "always"
     networks:
       - kiddymap-network
+
   api-gateway:
     depends_on:
       - config-server
@@ -65,6 +72,7 @@ services:
     restart: "always"
     networks:
       - kiddymap-network
+
   microservice-profil:
     depends_on:
       - config-server
@@ -82,6 +90,7 @@ services:
     restart: "always"
     networks:
       - kiddymap-network
+
   microservice-location:
     depends_on:
       - config-server
@@ -101,4 +110,5 @@ services:
       - kiddymap-network
 
 networks:
-  kiddymap-network :
+  kiddymap-network:
+    driver: bridge
