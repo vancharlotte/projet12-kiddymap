@@ -1,7 +1,7 @@
 # Projet12
 Aidez la communauté en tant que développeur d'application Java
 
-## Environnement de développement
+### Environnement de développement
 
 Les composants nécessaires lors du développement sont disponibles via des conteneurs _docker_.
 L'environnement de développement est assemblé grâce à _docker-compose_
@@ -15,20 +15,6 @@ Il comporte :
 *   une api gateway _api-gateway_
 *   un microservice qui gère les utilisateurs _microservice-profil_
 *   un microservice qui gère les données de la carte _microservice-location_
-
-### Description des API : Swagger
-
-microservice-profil :
-```
-swagger.json: http://localhost:9002/v2/api-docs
-swagger-ui: http://localhost:9002/swagger-ui/
-```
-
-microservice-location : 
-```
-swagger.json: http://localhost:9003/v2/api-docs
-swagger-ui: http://localhost:9003/swagger-ui/
-```
 
 
 ### Lancement
@@ -49,4 +35,18 @@ swagger-ui: http://localhost:9003/swagger-ui/
     docker-compose stop
     docker-compose rm -v
     docker-compose up
+```
+
+### Description des API : Swagger
+
+microservice-profil :
+```
+swagger.json: http://localhost:9002/v2/api-docs
+swagger-ui: http://localhost:9002/swagger-ui/
+```
+
+microservice-location :
+```
+swagger.json: http://localhost:9003/v2/api-docs
+swagger-ui: http://localhost:9003/swagger-ui/
 ```
