@@ -1,7 +1,7 @@
 
 	INSERT INTO profil (profil_id, auth_id, username, email, description)
 	VALUES
-    ('31482d4d-2124-414c-b186-8dbf1886af7f','auth0|61a61c7b7ee9bf00707c2447', 'profil 1', 'vanhuyse.charlotte@gmail.com',	'description du profil 1'	),
+    ('c6044867-c918-4977-bc1e-28057fbdce8f','auth0|61a61c7b7ee9bf00707c2447', 'profil 1', 'vanhuyse.charlotte@gmail.com',	'description du profil 1'	),
     ('7536c972-0d68-4503-9c20-a002dfff1858','auth0|623b07516253630071cd1536', 'profil test user', 'test@test.com',	'description du profil test'	);
 
     INSERT INTO location (location_id, longitude, latitude, name, description)
@@ -1275,7 +1275,9 @@
     ('509b1af2-e85e-404b-b713-93f24bd7c68b',3.08915314520457,50.6251613786318,'Le Tabou','description du lieu'),
     ('c3459178-b418-4127-a480-9df4af8ad83f',3.11222721985555,50.6261479996705,'Don Pino Pizza','description du lieu'),
     ('1a3f9076-0fd6-4572-90ab-0fd6860da520',3.09628322192112,50.6340306013872,'Le Cutty Sark','description du lieu'),
-    ('b5cfb592-0bc2-403a-8616-02eefcc3be1d',3.10670424870216,50.6281156182105,'Pita Isly','description du lieu');
+    ('b5cfb592-0bc2-403a-8616-02eefcc3be1d',3.10670424870216,50.6281156182105,'Pita Isly','description du lieu'),
+    ('bb58af76-95e7-434b-98d1-a8879a9df6d9',2.49670424870216,49.6281156182105,'adresse démo','description du lieu'),
+    ('436b4ab4-913f-4611-9235-fa5426d4cbf4',2.49674600000000,48.7777777777777,'adresse démo','description du lieu');
 
 
     INSERT INTO equipment (equipment_id, name)
@@ -1284,11 +1286,15 @@
             ('545fa4c6-2be2-4862-87a4-d4d82c0e8be0', 'micro-onde'),
             ('4236e64a-1718-4809-b0b1-d13f72f599a4', 'aire de jeu'),
             ('3bb45472-a960-4a9c-b252-b57046581384', 'parking poussette'),
-           ('3181e984-cdd8-48d9-a7cc-b5d33f669448',	'espace allaitement');
+            ('3181e984-cdd8-48d9-a7cc-b5d33f669448',  'espace allaitement');
 
     INSERT INTO location_equipment (location_id, equipment_id)
-    VALUES ('d2d4b202-1fa1-4934-9ebb-b2d3202ffa48','75892ad1-24ce-4ea6-b05e-ac33a5423954');
+    VALUES ('bb58af76-95e7-434b-98d1-a8879a9df6d9','3138aa5d-23ec-4836-b387-0ddf5eaa23f9'),
+           ('bb58af76-95e7-434b-98d1-a8879a9df6d9','75892ad1-24ce-4ea6-b05e-ac33a5423954'),
+           ('bb58af76-95e7-434b-98d1-a8879a9df6d9','545fa4c6-2be2-4862-87a4-d4d82c0e8be0'),
+           ('436b4ab4-913f-4611-9235-fa5426d4cbf4','4236e64a-1718-4809-b0b1-d13f72f599a4'),
+           ('436b4ab4-913f-4611-9235-fa5426d4cbf4','3bb45472-a960-4a9c-b252-b57046581384');
 
     INSERT INTO profil_location_favorite (profil_id, location_id)
-    VALUES ('31482d4d-2124-414c-b186-8dbf1886af7f','d2d4b202-1fa1-4934-9ebb-b2d3202ffa48');
+    VALUES ('c6044867-c918-4977-bc1e-28057fbdce8f','d2d4b202-1fa1-4934-9ebb-b2d3202ffa48');
 

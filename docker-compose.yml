@@ -1,4 +1,10 @@
 version: '3'
+
+x-common-variables: &common-variables
+    POSTGRES_DB: db_kiddymap
+    POSTGRES_USER: usr_kiddymap
+    POSTGRES_PASSWORD: kiddymap
+
 services:
   adminer:
     image: adminer
@@ -17,10 +23,7 @@ services:
     restart: "always"
     volumes:
       - "./docker/init/db/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d"
-    environment:
-      - POSTGRES_DB=db_kiddymap
-      - POSTGRES_USER=usr_kiddymap
-      - POSTGRES_PASSWORD=kiddymap
+    environment: *common-variables
     networks:
       - kiddymap-network
 
